@@ -1,12 +1,13 @@
 // Styles
 import "root.css";
+import "components/ChessBoard/ChessBoard.css";
 // Components
 import ChessBoard from "components/ChessBoard/ChessBoard";
 
 function App() {
   return (
     <>
-      <ChessBoard />
+      <ChessBoard id="chess-board" />
     </>
   );
 }

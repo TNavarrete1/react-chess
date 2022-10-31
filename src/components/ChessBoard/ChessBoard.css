@@ -1,0 +1,63 @@
+#chess-board {
+  display: grid;
+  grid-template-columns: repeat(8, auto);
+  grid-template-rows: repeat(8, auto);
+  height: 600px;
+  width: 600px;
+}
+.piece {
+  height: 100%;
+  width: 100%;
+  align-self: center;
+  justify-self: center;
+}
+
+/********************************************************
+        Piece Backgrounds 
+**************************************************/
+.br {
+  background-image: url("assets/images/black_rook.png");
+}
+.bn {
+  background-image: url("assets/images/black_knight.png");
+}
+.bb {
+  background-image: url("assets/images/black_bishop.png");
+}
+.bq {
+  background-image: url("assets/images/black_queen.png");
+}
+.bk {
+  background-image: url("assets/images/black_king.png");
+}
+.bp {
+  background-image: url("assets/images/black_pawn.png");
+}
+.wr {
+  background-image: url("assets/images/white_rook.png");
+}
+.wn {
+  background-image: url("assets/images/white_knight.png");
+}
+.wb {
+  background-image: url("assets/images/white_bishop.png");
+}
+.wq {
+  background-image: url("assets/images/white_queen.png");
+}
+.wk {
+  background-image: url("assets/images/white_king.png");
+}
+.wp {
+  background-image: url("assets/images/white_pawn.png");
+}
+/*************************************************
+        Piece Backgrounds
+********************************************************/
+
+.piece-img {
+  height: 100%;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
