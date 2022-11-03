@@ -1,16 +1,23 @@
 #chess-board {
-  display: grid;
-  grid-template-columns: repeat(8, auto);
-  grid-template-rows: repeat(8, auto);
-  height: 600px;
-  width: 600px;
+    position: relative;
+    justify-self: flex-start;
+    margin-top: 5%;
+    margin-left: 10%;
+    height: 70vh;
+    width: 70vh;
+    border-radius: 10px;
+    background-size: cover;
 }
-.piece {
-  height: 100%;
-  width: 100%;
-  align-self: center;
-  justify-self: center;
+
+/********************************************************
+        Chess Board Backgrounds 
+**************************************************/
+.bg-tan {
+    background-image:url("assets/background/board_tan.png");
 }
+/*************************************************
+        Chess Board Backgrounds
+********************************************************/
 
 /********************************************************
         Piece Backgrounds 
@@ -55,9 +62,19 @@
         Piece Backgrounds
 ********************************************************/
 
+.piece {
+    position: absolute;
+    cursor: grab;
+  }
+
 .piece-img {
-  height: 100%;
-  width: 100%;
+  height: 12.5%;
+  width: 12.5%;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 100%;
+  background-color: transparent;
+}
+
+.dragging {
+    z-index: 999;
 }
