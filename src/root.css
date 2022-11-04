@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap');
 /* Strip elements of default values */
 *,
 *::before,
@@ -19,12 +20,19 @@
     /* Colors */
     --color-black: #141414;
     --color-white: #fff8f8;
+    --color-gray: #b9b9b9;
+
     /* Bg Colors */
     --bg-black: #141414;
     --bg-gray: rgb(218, 218, 218);
     --bg-white: #fff8f8;
     --bg-dark-blue: #343477;
-    --bg-blue: #6262ed;
+    --bg-blue: #6767f0;
     --bg-red: #ed6262;
-    --bg-dark-gray: #2f2f2f;
+    --bg-green: #a8d254;
+    --bg-dark-yellow: #e0da23;
+    --bg-dark-gray300: #2f2f2f;
+    --bg-dark-gray500: #252525;
+    --bg-dark-gray700: #1c1c1c;
+    --bg-dark-gray900: #090909;
 }

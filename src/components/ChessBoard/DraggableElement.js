@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 function DraggableElement({ cell, chessBoard }) {
   const [draggingState, setdraggingState] = useState({
@@ -6,6 +6,14 @@ function DraggableElement({ cell, chessBoard }) {
     posX: cell.location.posX,
     posY: cell.location.posY,
   });
+
+  useEffect(() => {
+    setdraggingState((prev) => {
+      prev.posX = cell.location.posX;
+      prev.posY = cell.location.posY;
+      return { ...prev };
+    });
+  }, [cell]);
 
   const onDragStart = (e) => {
     const halfOfPieceSize = 6.25;

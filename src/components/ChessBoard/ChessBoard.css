@@ -1,12 +1,22 @@
 #chess-board {
     position: relative;
     justify-self: flex-start;
-    margin-top: 5%;
-    margin-left: 10%;
-    height: 70vh;
-    width: 70vh;
+    height: 90vh;
+    width: 90vh;
     border-radius: 10px;
     background-size: cover;
+}
+
+#board-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 999;
 }
 
 /********************************************************
