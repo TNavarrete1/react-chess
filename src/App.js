@@ -5,6 +5,7 @@ import "App.css";
 import { useState } from "react";
 import ChessBoard from "components/ChessBoard/ChessBoard";
 import GameOptions from "components/GameOptions/GameOptions";
+import MoveHistory from "components/MoveHistory/MoveHistory";
 
 function App() {
   const [gameState, setGameState] = useState({
@@ -16,7 +17,6 @@ function App() {
 
   const chooseTeam = (team) => {
     setGameState((prev) => {
-      prev.gameStart = true;
       prev.team = team;
       return { ...prev };
     });
@@ -25,6 +25,13 @@ function App() {
   const chooseGameMode = (gameMode) => {
     setGameState((prev) => {
       prev.gameMode = gameMode;
+      return { ...prev };
+    });
+  };
+
+  const startGame = (gameStarted) => {
+    setGameState((prev) => {
+      prev.gameStart = true;
       return { ...prev };
     });
   };
@@ -38,11 +45,18 @@ function App() {
         gameStart={gameState.gameStart}
         gameOver={gameState.gameOver}
       />
-      <GameOptions
-        id="game-options"
-        handleTeamOption={chooseTeam}
-        handleGameMode={chooseGameMode}
-      />
+      {gameState.gameStart ? (
+        <MoveHistory />
+      ) : (
+        <GameOptions
+          id="game-options"
+          team={gameState.team}
+          gameMode={gameState.gameMode}
+          handleTeamOption={chooseTeam}
+          handleGameMode={chooseGameMode}
+          handleStartGame={startGame}
+        />
+      )}
     </div>
   );
 }
