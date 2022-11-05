@@ -1,5 +1,5 @@
 // Initial Board structure
-export const initBoard = (team) => {
+export const getBoardPieces = (team) => {
   return [
     /*****************************************************
                     Black Pieces
@@ -28,14 +28,14 @@ export const initBoard = (team) => {
     {
       id: 3,
       location:
-        team === "white" ? { posX: 37.5, posY: 0 } : { posX: 37.5, posY: 87.5 },
+        team === "white" ? { posX: 37.5, posY: 0 } : { posX: 50, posY: 87.5 },
       piece: "piece bq",
       team: "black",
     },
     {
       id: 4,
       location:
-        team === "white" ? { posX: 50, posY: 0 } : { posX: 50, posY: 87.5 },
+        team === "white" ? { posX: 50, posY: 0 } : { posX: 37.5, posY: 87.5 },
       piece: "piece bk",
       team: "black",
     },
@@ -219,14 +219,14 @@ export const initBoard = (team) => {
     {
       id: 27,
       location:
-        team === "white" ? { posX: 37.5, posY: 87.5 } : { posX: 37.5, posY: 0 },
+        team === "white" ? { posX: 37.5, posY: 87.5 } : { posX: 50, posY: 0 },
       piece: "piece wq",
       team: "white",
     },
     {
       id: 28,
       location:
-        team === "white" ? { posX: 50, posY: 87.5 } : { posX: 50, posY: 0 },
+        team === "white" ? { posX: 50, posY: 87.5 } : { posX: 37.5, posY: 0 },
       piece: "piece wk",
       team: "white",
     },
@@ -254,5 +254,118 @@ export const initBoard = (team) => {
     /************************************************
                     White Pieces
    ****************************************************/
+  ];
+};
+
+export const getAxesLabels = (team, color) => {
+  return [
+    {
+      id: 1,
+      location:
+        team === "white" ? { posX: 0, posY: 87.5 } : { posX: 0, posY: 0 },
+      color: team === "white" ? `${color}-dark` : `${color}-light`,
+    },
+    {
+      id: 2,
+      location:
+        team === "white" ? { posX: 0, posY: 75 } : { posX: 0, posY: 12.5 },
+      color: team === "white" ? `${color}-light` : `${color}-dark`,
+    },
+    {
+      id: 3,
+      location:
+        team === "white" ? { posX: 0, posY: 62.5 } : { posX: 0, posY: 25 },
+      color: team === "white" ? `${color}-dark` : `${color}-light`,
+    },
+    {
+      id: 4,
+      location:
+        team === "white" ? { posX: 0, posY: 50 } : { posX: 0, posY: 37.5 },
+      color: team === "white" ? `${color}-light` : `${color}-dark`,
+    },
+    {
+      id: 5,
+      location:
+        team === "white" ? { posX: 0, posY: 37.5 } : { posX: 0, posY: 50 },
+      color: team === "white" ? `${color}-dark` : `${color}-light`,
+    },
+    {
+      id: 6,
+      location:
+        team === "white" ? { posX: 0, posY: 25 } : { posX: 0, posY: 62.5 },
+      color: team === "white" ? `${color}-light` : `${color}-dark`,
+    },
+    {
+      id: 7,
+      location:
+        team === "white" ? { posX: 0, posY: 12.5 } : { posX: 0, posY: 75 },
+      color: team === "white" ? `${color}-dark` : `${color}-light`,
+    },
+    {
+      id: 8,
+      location:
+        team === "white" ? { posX: 0, posY: 0 } : { posX: 0, posY: 87.5 },
+      color: team === "white" ? `${color}-light` : `${color}-dark`,
+    },
+    {
+      id: "a",
+      location:
+        team === "white" ? { posX: 0, posY: 87.5 } : { posX: 87.5, posY: 87.5 },
+      color: team === "white" ? `${color}-dark` : `${color}-light`,
+    },
+    {
+      id: "b",
+      location:
+        team === "white"
+          ? { posX: 12.5, posY: 87.5 }
+          : { posX: 75, posY: 87.5 },
+      color: team === "white" ? `${color}-light` : `${color}-dark`,
+    },
+    {
+      id: "c",
+      location:
+        team === "white"
+          ? { posX: 25, posY: 87.5 }
+          : { posX: 62.5, posY: 87.5 },
+      color: team === "white" ? `${color}-dark` : `${color}-light`,
+    },
+    {
+      id: "d",
+      location:
+        team === "white"
+          ? { posX: 37.5, posY: 87.5 }
+          : { posX: 50, posY: 87.5 },
+      color: team === "white" ? `${color}-light` : `${color}-dark`,
+    },
+    {
+      id: "e",
+      location:
+        team === "white"
+          ? { posX: 50, posY: 87.5 }
+          : { posX: 37.5, posY: 87.5 },
+      color: team === "white" ? `${color}-dark` : `${color}-light`,
+    },
+    {
+      id: "f",
+      location:
+        team === "white"
+          ? { posX: 62.5, posY: 87.5 }
+          : { posX: 25, posY: 87.5 },
+      color: team === "white" ? `${color}-light` : `${color}-dark`,
+    },
+    {
+      id: "g",
+      location:
+        team === "white"
+          ? { posX: 75, posY: 87.5 }
+          : { posX: 12.5, posY: 87.5 },
+      color: team === "white" ? `${color}-dark` : `${color}-light`,
+    },
+    {
+      id: "h",
+      location:
+        team === "white" ? { posX: 87.5, posY: 87.5 } : { posX: 0, posY: 87.5 },
+      color: team === "white" ? `${color}-light` : `${color}-dark`,
+    },
   ];
 };
