@@ -1,21 +1,80 @@
+// Utilites
+import { getBoardPositions, getBoardSquare } from "utilities/board";
+// Components
 import { useState, useEffect, useCallback } from "react";
 
-function DraggableElement({ cell, chessBoard }) {
+function DraggableElement({
+  boardOrientation,
+  square,
+  piece,
+  onPieceDrop,
+  chessBoard,
+}) {
+  // Tracks piece movement
   const [draggingState, setdraggingState] = useState({
     isDragging: false,
-    posX: cell.location.posX,
-    posY: cell.location.posY,
+    isOutOfBounds: false,
+    posX: getBoardPositions(boardOrientation)[square].location.posX,
+    posY: getBoardPositions(boardOrientation)[square].location.posY,
   });
+  // Stores square (e.g. a6)
+  const [currSquare, setCurrSquare] = useState(square);
 
   useEffect(() => {
     setdraggingState((prev) => {
-      prev.posX = cell.location.posX;
-      prev.posY = cell.location.posY;
+      prev.posX = getBoardPositions(boardOrientation)[square].location.posX;
+      prev.posY = getBoardPositions(boardOrientation)[square].location.posY;
       return { ...prev };
     });
-  }, [cell]);
+  }, [boardOrientation, square]);
+
+  const handleOutOfBounds = () => {
+    setdraggingState((prev) => {
+      // Piece is not being dragged
+      if (!prev.isDragging) {
+        return prev;
+      }
+
+      // Piece was being dragged out of bounds
+      prev.isOutOfBounds = true;
+      return { ...prev };
+    });
+  };
+  const handleInBounds = () => {
+    setdraggingState((prev) => {
+      // Piece is not being dragged
+      if (!prev.isDragging) {
+        return prev;
+      }
+
+      // Piece was being dragged in bounds
+      prev.isOutOfBounds = false;
+      return { ...prev };
+    });
+  };
+
+  const onWindowDrop = () => {
+    // Remove window mouse event
+    window.removeEventListener("mousemove", onDrag);
+    window.removeEventListener("mouseup", onWindowDrop);
+
+    setdraggingState((prev) => {
+      // Piece is still in bounds
+      if (!prev.isOutOfBounds) {
+        return prev;
+      }
+
+      // Piece is out of bounds: move back and reset isDragging and isOutOfBounds
+      prev.isDragging = false;
+      prev.isOutOfBounds = false;
+      prev.posX = getBoardPositions(boardOrientation)[currSquare].location.posX;
+      prev.posY = getBoardPositions(boardOrientation)[currSquare].location.posY;
+      return { ...prev };
+    });
+  };
 
   const onDragStart = (e) => {
+    // Snap piece position to Mouse
     const halfOfPieceSize = 6.25;
     const posX =
       ((e.clientX - chessBoard.current.offsetLeft) /
@@ -28,7 +87,10 @@ function DraggableElement({ cell, chessBoard }) {
         100 -
       halfOfPieceSize;
 
+    // Window events to track drag and drop outside of chessboard
     window.addEventListener("mousemove", onDrag);
+    window.addEventListener("mouseup", onWindowDrop);
+    // Update dragging sate
     setdraggingState((prev) => {
       prev.isDragging = true;
       prev.posX = posX;
@@ -77,35 +139,41 @@ function DraggableElement({ cell, chessBoard }) {
   );
 
   const onDragDrop = (e) => {
-    const singleCellSizePx = chessBoard.current.clientWidth / 8;
-    const singleCellSizePercent = 12.5;
+    // Get x and y positions
+    const singlesquareSizePx = chessBoard.current.clientWidth / 8;
+    const singlesquareSizePercent = 12.5;
     const posX =
       Math.floor(
-        (e.clientX - chessBoard.current.offsetLeft) / singleCellSizePx
-      ) * singleCellSizePercent;
+        (e.clientX - chessBoard.current.offsetLeft) / singlesquareSizePx
+      ) * singlesquareSizePercent;
     const posY =
       Math.floor(
-        (e.clientY - chessBoard.current.offsetTop) / singleCellSizePx
-      ) * singleCellSizePercent;
+        (e.clientY - chessBoard.current.offsetTop) / singlesquareSizePx
+      ) * singlesquareSizePercent;
 
+    // Remove window mouse event
     window.removeEventListener("mousemove", onDrag);
-    setdraggingState((prev) => {
-      prev.isDragging = false;
-      prev.posX = posX;
-      prev.posY = posY;
-      return { ...prev };
-    });
+    window.removeEventListener("mouseup", onWindowDrop);
+    // Move piece to next square or back to original position
+    const nextSquare = getBoardSquare(boardOrientation, posX, posY);
+    if (!onPieceDrop(currSquare, nextSquare)) {
+      setdraggingState((prev) => {
+        prev.isDragging = false;
+        prev.posX =
+          getBoardPositions(boardOrientation)[currSquare].location.posX;
+        prev.posY =
+          getBoardPositions(boardOrientation)[currSquare].location.posY;
+        return { ...prev };
+      });
+    }
   };
 
   return (
     <div
       // Classes
-      className={`piece-img ${cell ? cell.piece : ""} ${
-        draggingState.isDragging ? "dragging" : ""
+      className={`piece-img ${piece ? piece : ""}${
+        draggingState.isDragging ? " dragging" : ""
       }`}
-      // Data
-      data-team={cell.team}
-      data-id={cell.id}
       // Inline Styles
       style={{
         top: `${draggingState.posY}%`,
@@ -114,6 +182,8 @@ function DraggableElement({ cell, chessBoard }) {
       // Event Callbacks
       onMouseDown={onDragStart}
       onMouseUp={onDragDrop}
+      onMouseLeave={handleOutOfBounds}
+      onMouseEnter={handleInBounds}
     ></div>
   );
 }

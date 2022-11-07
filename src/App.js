@@ -3,60 +3,59 @@ import "root.css";
 import "App.css";
 // Components
 import { useState } from "react";
+import { Chess } from "chess.js";
 import ChessBoard from "components/ChessBoard/ChessBoard";
 import GameOptions from "components/GameOptions/GameOptions";
 import MoveHistory from "components/MoveHistory/MoveHistory";
 
 function App() {
-  const [gameState, setGameState] = useState({
-    team: "white",
-    gameMode: null,
-    gameStart: false,
-    gameOver: false,
-  });
+  const [boardOrientation, setBoardOrientation] = useState("white"); // Handles board orientation
+  const [game, setGame] = useState(new Chess()); // Chess rules and logic
 
-  const chooseTeam = (team) => {
-    setGameState((prev) => {
-      prev.team = team;
-      return { ...prev };
-    });
+  const handleClick = () => {
+    if (boardOrientation === "white") {
+      setBoardOrientation("black");
+    } else {
+      setBoardOrientation("white");
+    }
   };
 
-  const chooseGameMode = (gameMode) => {
-    setGameState((prev) => {
-      prev.gameMode = gameMode;
-      return { ...prev };
+  const handlePieceMove = (sourceSquare, targetSquare) => {
+    let move = null;
+    setGame((prev) => {
+      move = prev.move({ from: sourceSquare, to: targetSquare });
+      return new Chess(prev.fen());
     });
-  };
-
-  const startGame = (gameStarted) => {
-    setGameState((prev) => {
-      prev.gameStart = true;
-      return { ...prev };
-    });
+    // Move wasn't valid
+    if (move === null) {
+      return false;
+    }
+    return true;
   };
 
   return (
     <div id="layout">
       <ChessBoard
-        id="chess-board"
-        team={gameState.team}
-        gameMode={gameState.gameMode}
-        gameStart={gameState.gameStart}
-        gameOver={gameState.gameOver}
+        boardOrientation={boardOrientation}
+        isBoardInactive={false}
+        position={game.board()}
+        theme="tan"
+        onPieceDrop={handlePieceMove}
       />
-      {gameState.gameStart ? (
-        <MoveHistory />
-      ) : (
-        <GameOptions
-          id="game-options"
-          team={gameState.team}
-          gameMode={gameState.gameMode}
-          handleTeamOption={chooseTeam}
-          handleGameMode={chooseGameMode}
-          handleStartGame={startGame}
-        />
-      )}
+      <button onClick={handleClick}>Flip board</button>
+      {/* <div id="side-card">
+        {gameState.gameStart ? (
+          <MoveHistory />
+        ) : (
+          <GameOptions
+            team={gameState.boardOrientation}
+            gameMode={gameState.gameMode}
+            handleTeamOption={chooseTeam}
+            handleGameMode={chooseGameMode}
+            handleStartGame={startGame}
+          />
+        )}
+      </div> */}
     </div>
   );
 }
