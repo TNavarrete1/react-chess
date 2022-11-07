@@ -71,26 +71,16 @@
 /*************************************************
         Piece Backgrounds
 ********************************************************/
-
-.piece {
-    position: absolute;
-    cursor: grab;
-  }
-
 .piece-img {
+    position: absolute;
   height: 12.5%;
   width: 12.5%;
   background-repeat: no-repeat;
   background-size: 100%;
   background-color: transparent;
+  cursor: grab;
 }
 
 .dragging {
     z-index: 999;
-}
-
-.board-axes-labels {
-    position: absolute;
-    height: 12.5%;
-    width: 12.5%;
 }

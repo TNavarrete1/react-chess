@@ -39,10 +39,14 @@
     --bg-dark-gray700: #1c1c1c;
     --bg-dark-gray900: #090909;
 
+    /* Transparent Bg Colors */
+    --bg-transparent-dark-gray900: #090909ce;
+
     /* Hover Color */
     --hover-yellow: rgba(255, 247, 0, 0.425);
+    --hover-gray: #e3e2e2;
 
     /* Chess Board Colors */
-    --color-tan-dark: rgb(255, 177, 75);
-    --color-tan-light: rgb(255, 199, 104);
+    --color-tan-dark: rgb(176, 116, 38);
+    --color-tan-light: rgb(253, 210, 137);
 }

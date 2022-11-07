@@ -1,0 +1,19 @@
+.board-axes-labels {
+    position: absolute;
+    height: 12.5%;
+    width: 12.5%;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color);
+}
+
+.y-axis-labels {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+}
+.x-axis-labels {
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+}

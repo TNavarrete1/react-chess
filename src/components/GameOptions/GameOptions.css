@@ -2,14 +2,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 15px 30px;
-    height: 95vh;
-    width: 100%;
-    max-width: 400px;
-    border-radius: 10px;
+    padding: 15px 30px 40px 30px;
+    height: 100%;
     font-family: var(--font-primary);
     color: var(--color-white);
-    background: var(--bg-dark-gray500)
 }
 #game-options header {
     font-size: 40px;
@@ -69,15 +65,27 @@
     display: grid;
     grid-template-areas: 
         "header header header"
-        ". . .";
-    grid-template-rows: repeat(2, min-content);
+        "white-team random-team black-team"
+        "play-button play-button play-button";
+        grid-template-rows: repeat(2, min-content) auto;
     row-gap: 10px;
     column-gap: 20px;
+    height: 100%;
     text-align: center;
 }
 #team-list header {
     grid-area: header;
     font-size: 25px;
+}
+
+#white-team-icon {
+    grid-area: white-team;
+}
+#random-team-icon {
+    grid-area: random-team;
+}
+#black-team-icon {
+    grid-area: black-team;
 }
 .team-button {
     background: transparent;
@@ -97,8 +105,10 @@
 }
 
 #start-game-button {
-    margin: auto auto 20px auto;
+    grid-area: play-button;
+    align-self: flex-end;
     padding: 20px 35px;
+    height: min-content;
     width: 100%;
     font-size: 25px;
     font-weight: 900;
