@@ -25,20 +25,8 @@ function DraggableElement({
   });
   // Stores square (e.g. a6)
   const [currSquare, setCurrSquare] = useState(targetSquare);
+  const piece = useRef();
   const touchObject = useRef();
-
-  useEffect(() => {
-    setdraggingState((prev) => {
-      prev.posX =
-        getBoardPositions(boardOrientation)[targetSquare].location.posX;
-      prev.posY =
-        getBoardPositions(boardOrientation)[targetSquare].location.posY;
-      return { ...prev };
-    });
-    setCurrSquare((prev) => {
-      return targetSquare;
-    });
-  }, [boardOrientation, targetSquare]);
 
   // Runs when piece is moved outside of chessboard
   const handleOutOfBounds = () => {
@@ -63,84 +51,6 @@ function DraggableElement({
 
       // Piece was being dragged in bounds
       prev.isOutOfBounds = false;
-      return { ...prev };
-    });
-  };
-
-  const disableContextMenu = useCallback((e) => {
-    e.preventDefault();
-    return;
-  }, []);
-
-  const onDragStart = (e) => {
-    if (!canMovePieces) {
-      return;
-    }
-    if (e.type === "mousedown") {
-      // Prevents text selection on drag
-      e.preventDefault();
-    } else if (e.type === "touchstart") {
-      document.querySelector("body").classList.add("lock-screen");
-      touchObject.current = e.targetTouches[0];
-    }
-    // Window events to track drag and drop outside of chessboard
-    window.addEventListener("mousemove", onDrag);
-    window.addEventListener("touchmove", onDrag);
-    window.addEventListener("mouseup", onDragDrop);
-    window.addEventListener("touchend", onDragDrop);
-    window.addEventListener("contextmenu", disableContextMenu);
-
-    // Get square being hovered over and active hover and possible moves effect
-    const singlesquareSizePx = chessBoard.current.clientWidth / 8;
-    const singlesquareSizePercent = 12.5;
-    const squarePosX =
-      Math.floor(
-        ((e.clientX || touchObject.current.pageX) -
-          chessBoard.current.offsetLeft) /
-          singlesquareSizePx
-      ) * singlesquareSizePercent;
-    const squarePosY =
-      Math.floor(
-        ((e.clientY || touchObject.current.pageY) -
-          chessBoard.current.offsetTop) /
-          singlesquareSizePx
-      ) * singlesquareSizePercent;
-    const sourceSquare = getBoardSquare(
-      boardOrientation,
-      squarePosX,
-      squarePosY
-    );
-    if (e.type === "touchstart") {
-      onSquareHover(sourceSquare, true); // Activate square highlight and circular indicator for touch event
-    } else {
-      onSquareHover(sourceSquare); // Activate square highlight
-    }
-    activateSelectedPieceEffects(sourceSquare, { pieceName, pieceColor }); // Activate possible moves effect
-
-    // Snap piece position to Mouse
-    const halfOfPieceSize = 6.25;
-    const posX =
-      (((e.clientX || touchObject.current.pageX) -
-        chessBoard.current.offsetLeft) /
-        chessBoard.current.clientWidth) *
-        100 -
-      halfOfPieceSize;
-    const posY =
-      (((e.clientY || touchObject.current.pageY) -
-        chessBoard.current.offsetTop) /
-        chessBoard.current.clientWidth) *
-        100 -
-      halfOfPieceSize;
-
-    // Update dragging sate
-    setdraggingState((prev) => {
-      if (e.type === "mousedown") {
-        prev.draggingClass = "mouse-drag";
-      } else if (e.type === "touchstart") {
-        prev.draggingClass = "touch-drag";
-      }
-      prev.posX = posX;
-      prev.posY = posY;
       return { ...prev };
     });
   };
@@ -233,7 +143,6 @@ function DraggableElement({
       window.removeEventListener("touchmove", onDrag);
       window.removeEventListener("mouseup", onDragDrop);
       window.removeEventListener("touchend", onDragDrop);
-      window.removeEventListener("contextmenu", disableContextMenu);
 
       // Get position of square where chess piece is dropped
       const singlesquareSizePx = chessBoard.current.clientWidth / 8;
@@ -287,12 +196,120 @@ function DraggableElement({
       onPieceDrop,
       onSquareHover,
       deactivateSelectedPieceEffects,
-      disableContextMenu,
     ]
   );
 
+  const onDragStart = useCallback(
+    (e) => {
+      if (!canMovePieces) {
+        return;
+      }
+      e.preventDefault(); // Prevents text selection on drag and touch effects
+      if (e.type === "touchstart") {
+        document.querySelector("body").classList.add("lock-screen");
+        touchObject.current = e.targetTouches[0];
+      }
+
+      // Window events to track drag and drop outside of chessboard
+      window.addEventListener("mousemove", onDrag);
+      window.addEventListener("touchmove", onDrag);
+      window.addEventListener("mouseup", onDragDrop);
+      window.addEventListener("touchend", onDragDrop);
+
+      // Get square being hovered over and active hover and possible moves effect
+      const singlesquareSizePx = chessBoard.current.clientWidth / 8;
+      const singlesquareSizePercent = 12.5;
+      const squarePosX =
+        Math.floor(
+          ((e.clientX || touchObject.current.pageX) -
+            chessBoard.current.offsetLeft) /
+            singlesquareSizePx
+        ) * singlesquareSizePercent;
+      const squarePosY =
+        Math.floor(
+          ((e.clientY || touchObject.current.pageY) -
+            chessBoard.current.offsetTop) /
+            singlesquareSizePx
+        ) * singlesquareSizePercent;
+      const sourceSquare = getBoardSquare(
+        boardOrientation,
+        squarePosX,
+        squarePosY
+      );
+      if (e.type === "touchstart") {
+        onSquareHover(sourceSquare, true); // Activate square highlight and circular indicator for touch event
+      } else {
+        onSquareHover(sourceSquare); // Activate square highlight
+      }
+      activateSelectedPieceEffects(sourceSquare, { pieceName, pieceColor }); // Activate possible moves effect
+
+      // Snap piece position to Mouse
+      const halfOfPieceSize = 6.25;
+      const posX =
+        (((e.clientX || touchObject.current.pageX) -
+          chessBoard.current.offsetLeft) /
+          chessBoard.current.clientWidth) *
+          100 -
+        halfOfPieceSize;
+      const posY =
+        (((e.clientY || touchObject.current.pageY) -
+          chessBoard.current.offsetTop) /
+          chessBoard.current.clientWidth) *
+          100 -
+        halfOfPieceSize;
+
+      // Update dragging sate
+      setdraggingState((prev) => {
+        if (e.type === "mousedown") {
+          prev.draggingClass = "mouse-drag";
+        } else if (e.type === "touchstart") {
+          prev.draggingClass = "touch-drag";
+        }
+        prev.posX = posX;
+        prev.posY = posY;
+        return { ...prev };
+      });
+    },
+    [
+      activateSelectedPieceEffects,
+      boardOrientation,
+      canMovePieces,
+      chessBoard,
+      onDrag,
+      onDragDrop,
+      onSquareHover,
+      pieceColor,
+      pieceName,
+    ]
+  );
+
+  useEffect(() => {
+    const currPiece = piece.current;
+    currPiece.addEventListener("touchstart", onDragStart, {
+      passive: false,
+    });
+
+    return () => {
+      currPiece.removeEventListener("touchstart", onDragStart);
+    };
+  }, [onDragStart]);
+
+  useEffect(() => {
+    setdraggingState((prev) => {
+      prev.posX =
+        getBoardPositions(boardOrientation)[targetSquare].location.posX;
+      prev.posY =
+        getBoardPositions(boardOrientation)[targetSquare].location.posY;
+      return { ...prev };
+    });
+    setCurrSquare((prev) => {
+      return targetSquare;
+    });
+  }, [boardOrientation, targetSquare]);
+
   return (
     <div
+      ref={piece}
       // Classes
       className={`piece-img ${
         pieceName && pieceColor ? `${pieceColor}${pieceName}` : ""
@@ -308,7 +325,6 @@ function DraggableElement({
       onMouseDown={onDragStart}
       onMouseLeave={handleOutOfBounds}
       onMouseEnter={handleInBounds}
-      onTouchStart={onDragStart}
     ></div>
   );
 }
