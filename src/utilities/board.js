@@ -617,9 +617,21 @@ export const getBoardPositions = (boardOrientation) => {
 
 export const getBoardSquare = (boardOrientation, posX, posY) => {
   const col = ["a", "b", "c", "d", "e", "f", "g", "h"];
-  const colIndex = boardOrientation === "white" ? posX / 12.5 : 7 - posX / 12.5;
+  let colIndex = boardOrientation === "white" ? posX / 12.5 : 7 - posX / 12.5;
   const row = ["1", "2", "3", "4", "5", "6", "7", "8"];
-  const rowIndex = boardOrientation === "white" ? 7 - posY / 12.5 : posY / 12.5;
+  let rowIndex = boardOrientation === "white" ? 7 - posY / 12.5 : posY / 12.5;
+
+  // Make sure indices are in range
+  if (colIndex < 0) {
+    colIndex = 0;
+  } else if (colIndex > 7) {
+    colIndex = 7;
+  }
+  if (rowIndex < 0) {
+    rowIndex = 0;
+  } else if (rowIndex > 7) {
+    rowIndex = 7;
+  }
 
   return `${col[colIndex]}${row[rowIndex]}`;
 };

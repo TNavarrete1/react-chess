@@ -1,33 +1,46 @@
 // Utilites
 import { getBoardPositions, getBoardSquare } from "utilities/board";
 // Components
-import { useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, memo } from "react";
 
 function DraggableElement({
   boardOrientation,
-  square,
-  piece,
+  sourceSquare,
+  targetSquare,
+  pieceName,
+  pieceColor,
+  canMovePieces,
   onPieceDrop,
+  onSquareHover,
+  activateSelectedPieceEffects,
+  deactivateSelectedPieceEffects,
   chessBoard,
 }) {
   // Tracks piece movement
   const [draggingState, setdraggingState] = useState({
-    isDragging: false,
+    draggingClass: "",
     isOutOfBounds: false,
-    posX: getBoardPositions(boardOrientation)[square].location.posX,
-    posY: getBoardPositions(boardOrientation)[square].location.posY,
+    posX: getBoardPositions(boardOrientation)[sourceSquare].location.posX,
+    posY: getBoardPositions(boardOrientation)[sourceSquare].location.posY,
   });
   // Stores square (e.g. a6)
-  const [currSquare, setCurrSquare] = useState(square);
+  const [currSquare, setCurrSquare] = useState(targetSquare);
+  const touchObject = useRef();
 
   useEffect(() => {
     setdraggingState((prev) => {
-      prev.posX = getBoardPositions(boardOrientation)[square].location.posX;
-      prev.posY = getBoardPositions(boardOrientation)[square].location.posY;
+      prev.posX =
+        getBoardPositions(boardOrientation)[targetSquare].location.posX;
+      prev.posY =
+        getBoardPositions(boardOrientation)[targetSquare].location.posY;
       return { ...prev };
     });
-  }, [boardOrientation, square]);
+    setCurrSquare((prev) => {
+      return targetSquare;
+    });
+  }, [boardOrientation, targetSquare]);
 
+  // Runs when piece is moved outside of chessboard
   const handleOutOfBounds = () => {
     setdraggingState((prev) => {
       // Piece is not being dragged
@@ -40,6 +53,7 @@ function DraggableElement({
       return { ...prev };
     });
   };
+  // Runs when piece is moved inside of chessboard
   const handleInBounds = () => {
     setdraggingState((prev) => {
       // Piece is not being dragged
@@ -53,46 +67,78 @@ function DraggableElement({
     });
   };
 
-  const onWindowDrop = () => {
-    // Remove window mouse event
-    window.removeEventListener("mousemove", onDrag);
-    window.removeEventListener("mouseup", onWindowDrop);
-
-    setdraggingState((prev) => {
-      // Piece is still in bounds
-      if (!prev.isOutOfBounds) {
-        return prev;
-      }
-
-      // Piece is out of bounds: move back and reset isDragging and isOutOfBounds
-      prev.isDragging = false;
-      prev.isOutOfBounds = false;
-      prev.posX = getBoardPositions(boardOrientation)[currSquare].location.posX;
-      prev.posY = getBoardPositions(boardOrientation)[currSquare].location.posY;
-      return { ...prev };
-    });
-  };
+  const disableContextMenu = useCallback((e) => {
+    e.preventDefault();
+    return;
+  }, []);
 
   const onDragStart = (e) => {
+    if (!canMovePieces) {
+      return;
+    }
+    if (e.type === "mousedown") {
+      // Prevents text selection on drag
+      e.preventDefault();
+    } else if (e.type === "touchstart") {
+      document.querySelector("body").classList.add("lock-screen");
+      touchObject.current = e.targetTouches[0];
+    }
+    // Window events to track drag and drop outside of chessboard
+    window.addEventListener("mousemove", onDrag);
+    window.addEventListener("touchmove", onDrag);
+    window.addEventListener("mouseup", onDragDrop);
+    window.addEventListener("touchend", onDragDrop);
+    window.addEventListener("contextmenu", disableContextMenu);
+
+    // Get square being hovered over and active hover and possible moves effect
+    const singlesquareSizePx = chessBoard.current.clientWidth / 8;
+    const singlesquareSizePercent = 12.5;
+    const squarePosX =
+      Math.floor(
+        ((e.clientX || touchObject.current.pageX) -
+          chessBoard.current.offsetLeft) /
+          singlesquareSizePx
+      ) * singlesquareSizePercent;
+    const squarePosY =
+      Math.floor(
+        ((e.clientY || touchObject.current.pageY) -
+          chessBoard.current.offsetTop) /
+          singlesquareSizePx
+      ) * singlesquareSizePercent;
+    const sourceSquare = getBoardSquare(
+      boardOrientation,
+      squarePosX,
+      squarePosY
+    );
+    if (e.type === "touchstart") {
+      onSquareHover(sourceSquare, true); // Activate square highlight and circular indicator for touch event
+    } else {
+      onSquareHover(sourceSquare); // Activate square highlight
+    }
+    activateSelectedPieceEffects(sourceSquare, { pieceName, pieceColor }); // Activate possible moves effect
+
     // Snap piece position to Mouse
     const halfOfPieceSize = 6.25;
     const posX =
-      ((e.clientX - chessBoard.current.offsetLeft) /
+      (((e.clientX || touchObject.current.pageX) -
+        chessBoard.current.offsetLeft) /
         chessBoard.current.clientWidth) *
         100 -
       halfOfPieceSize;
     const posY =
-      ((e.clientY - chessBoard.current.offsetTop) /
+      (((e.clientY || touchObject.current.pageY) -
+        chessBoard.current.offsetTop) /
         chessBoard.current.clientWidth) *
         100 -
       halfOfPieceSize;
 
-    // Window events to track drag and drop outside of chessboard
-    window.addEventListener("mousemove", onDrag);
-    window.addEventListener("mouseup", onWindowDrop);
     // Update dragging sate
     setdraggingState((prev) => {
-      prev.isDragging = true;
+      if (e.type === "mousedown") {
+        prev.draggingClass = "mouse-drag";
+      } else if (e.type === "touchstart") {
+        prev.draggingClass = "touch-drag";
+      }
       prev.posX = posX;
       prev.posY = posY;
       return { ...prev };
@@ -101,19 +147,55 @@ function DraggableElement({
 
   const onDrag = useCallback(
     (e) => {
+      // Prevents text selection during drag
+      if (e.type === "mousemove") {
+        e.preventDefault();
+      } else if (e.type === "touchmove") {
+        touchObject.current = e.targetTouches[0];
+      }
+
+      // Get square being hovered over and active hover effect
+      const singlesquareSizePx = chessBoard.current.clientWidth / 8;
+      const singlesquareSizePercent = 12.5;
+      const squarePosX =
+        Math.floor(
+          ((e.clientX || touchObject.current.pageX) -
+            chessBoard.current.offsetLeft) /
+            singlesquareSizePx
+        ) * singlesquareSizePercent;
+      const squarePosY =
+        Math.floor(
+          ((e.clientY || touchObject.current.pageY) -
+            chessBoard.current.offsetTop) /
+            singlesquareSizePx
+        ) * singlesquareSizePercent;
+      const sourceSquare = getBoardSquare(
+        boardOrientation,
+        squarePosX,
+        squarePosY
+      );
+      if (e.type === "touchmove") {
+        onSquareHover(sourceSquare, true); // Activate square highlight and circular indicator for touch event
+      } else {
+        onSquareHover(sourceSquare); // Activate square highlight
+      }
+
+      // Get mouse location relative to chessboard
       const halfOfPieceSizePercent = 6.25;
       let posX =
-        ((e.clientX - chessBoard.current.offsetLeft) /
+        (((e.clientX || touchObject.current.pageX) -
+          chessBoard.current.offsetLeft) /
           chessBoard.current.clientWidth) *
           100 -
         halfOfPieceSizePercent;
       let posY =
-        ((e.clientY - chessBoard.current.offsetTop) /
+        (((e.clientY || touchObject.current.pageY) -
+          chessBoard.current.offsetTop) /
           chessBoard.current.clientWidth) *
           100 -
         halfOfPieceSizePercent;
 
-      // Check that the values are in bounds of container
+      // Keep location in bounds of chessboard
       const maxPosX = 93.5;
       const minPosX = -6;
       const maxPosY = 92;
@@ -129,63 +211,106 @@ function DraggableElement({
         posY = maxPosY;
       }
 
+      // Move chess piece to location
       setdraggingState((prev) => {
         prev.posX = posX;
         prev.posY = posY;
         return { ...prev };
       });
     },
-    [chessBoard]
+    [chessBoard, boardOrientation, onSquareHover]
   );
 
-  const onDragDrop = (e) => {
-    // Get x and y positions
-    const singlesquareSizePx = chessBoard.current.clientWidth / 8;
-    const singlesquareSizePercent = 12.5;
-    const posX =
-      Math.floor(
-        (e.clientX - chessBoard.current.offsetLeft) / singlesquareSizePx
-      ) * singlesquareSizePercent;
-    const posY =
-      Math.floor(
-        (e.clientY - chessBoard.current.offsetTop) / singlesquareSizePx
-      ) * singlesquareSizePercent;
+  const onDragDrop = useCallback(
+    (e) => {
+      if (e.type === "touchend") {
+        e.preventDefault();
+        document.querySelector("body").classList.remove("lock-screen");
+      }
 
-    // Remove window mouse event
-    window.removeEventListener("mousemove", onDrag);
-    window.removeEventListener("mouseup", onWindowDrop);
-    // Move piece to next square or back to original position
-    const nextSquare = getBoardSquare(boardOrientation, posX, posY);
-    if (!onPieceDrop(currSquare, nextSquare)) {
+      // Remove window mouse event
+      window.removeEventListener("mousemove", onDrag);
+      window.removeEventListener("touchmove", onDrag);
+      window.removeEventListener("mouseup", onDragDrop);
+      window.removeEventListener("touchend", onDragDrop);
+      window.removeEventListener("contextmenu", disableContextMenu);
+
+      // Get position of square where chess piece is dropped
+      const singlesquareSizePx = chessBoard.current.clientWidth / 8;
+      const singlesquareSizePercent = 12.5;
+      const posX =
+        Math.floor(
+          ((e.clientX || touchObject.current.pageX) -
+            chessBoard.current.offsetLeft) /
+            singlesquareSizePx
+        ) * singlesquareSizePercent;
+      const posY =
+        Math.floor(
+          ((e.clientY || touchObject.current.pageY) -
+            chessBoard.current.offsetTop) /
+            singlesquareSizePx
+        ) * singlesquareSizePercent;
+
+      /*
+            Attempt to move. Deactivate square hover effect because piece dragging is over.
+            Deactivate selected piece effects when move was valid or when piece was dragged
+            to current square.
+      */
+      onSquareHover(""); // Removes square hover effect
+      const targetSquare = getBoardSquare(boardOrientation, posX, posY);
+      const move = onPieceDrop(currSquare, targetSquare);
+      // Move was valid
+      if (move) {
+        deactivateSelectedPieceEffects(targetSquare); // Removes possible moves and highlighted square
+        return;
+      }
+      if (targetSquare === currSquare) {
+        deactivateSelectedPieceEffects(targetSquare); // Removes possible moves and highlighted square
+      }
+
+      // Move was invalid, move piece to original position and reset isDragging and isOutOfBounds
       setdraggingState((prev) => {
-        prev.isDragging = false;
+        prev.draggingClass = "";
+        prev.isOutOfBounds = false;
         prev.posX =
           getBoardPositions(boardOrientation)[currSquare].location.posX;
         prev.posY =
           getBoardPositions(boardOrientation)[currSquare].location.posY;
         return { ...prev };
       });
-    }
-  };
+    },
+    [
+      boardOrientation,
+      chessBoard,
+      currSquare,
+      onDrag,
+      onPieceDrop,
+      onSquareHover,
+      deactivateSelectedPieceEffects,
+      disableContextMenu,
+    ]
+  );
 
   return (
     <div
       // Classes
-      className={`piece-img ${piece ? piece : ""}${
-        draggingState.isDragging ? " dragging" : ""
-      }`}
+      className={`piece-img ${
+        pieceName && pieceColor ? `${pieceColor}${pieceName}` : ""
+      } ${draggingState.draggingClass}`}
       // Inline Styles
       style={{
         top: `${draggingState.posY}%`,
         left: `${draggingState.posX}%`,
       }}
+      // Data
+      data-square={targetSquare}
       // Event Callbacks
       onMouseDown={onDragStart}
-      onMouseUp={onDragDrop}
       onMouseLeave={handleOutOfBounds}
       onMouseEnter={handleInBounds}
+      onTouchStart={onDragStart}
     ></div>
   );
 }
 
-export default DraggableElement;
+export default memo(DraggableElement);

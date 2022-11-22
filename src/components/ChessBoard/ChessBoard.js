@@ -1,26 +1,112 @@
 // Styles
 import "components/ChessBoard/ChessBoard.css";
 // React components
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect, useCallback, forwardRef } from "react";
 import DraggableElement from "components/ChessBoard/DraggableElement";
-import AxesLables from "./AxesLabels";
+import AxesLables from "components/ChessBoard/AxesLabels";
+import HoverSquare from "components/ChessBoard/HoverSquare";
+import PossibleMoves from "components/ChessBoard/PossibleMoves";
+import MovementAfterEffect from "components/ChessBoard/MovementAfterEffect";
 
-function ChessBoard({
-  boardOrientation,
-  isBoardInactive,
-  position,
-  theme,
-  onPieceDrop,
-}) {
-  const chessBoard = useRef();
-  const [board, setBoard] = useState(position);
+function ChessBoard(
+  {
+    children,
+    width,
+    boardOrientation,
+    isBoardInactive,
+    position,
+    move,
+    canMoveAfterPreview,
+    canMovePieces,
+    isPreviewing,
+    theme,
+    onPieceDrop,
+    onPieceDragBegin,
+  },
+  ref
+) {
+  // State hook
+  const [hoverSquareEffects, setHoverSquareEffects] = useState({
+    square: "",
+    touchDrag: false,
+  });
+  const [selectedPieceEffects, setSelectedPieceEffects] = useState({
+    possibleMoves: null,
+    square: "",
+    activatedOnce: false,
+  });
 
+  // useEffect hooks
   useEffect(() => {
-    setBoard(position);
-  }, [position]);
+    setHoverSquareEffects({ square: "", touchDrag: false });
+    setSelectedPieceEffects({
+      possibleMoves: null,
+      square: "",
+      activatedOnce: false,
+    });
+  }, [isPreviewing, isBoardInactive]); // Resets ChessBoard
+
+  // Renders hover square
+  const handleSquareHover = useCallback((square, touchDrag = false) => {
+    setHoverSquareEffects({
+      square,
+      touchDrag,
+    });
+  }, []);
+
+  // Renders possible moves component under conditions
+  const activateSelectedPieceEffects = useCallback(
+    (sourceSquare, piece) => {
+      // Gets possible moves
+      const moves = onPieceDragBegin(sourceSquare, piece);
+
+      setSelectedPieceEffects((prev) => {
+        // Sets to default object with activatedOnce as false
+        if (!prev)
+          return {
+            possibleMoves: moves,
+            square: sourceSquare,
+            activatedOnce: false,
+          };
+
+        // If a new piece is selected reset activatedOnce
+        if (sourceSquare !== prev.square)
+          return {
+            possibleMoves: moves,
+            square: sourceSquare,
+            activatedOnce: false,
+          };
+
+        // sourceSquare has been clicked once
+        return {
+          possibleMoves: moves,
+          square: sourceSquare,
+          activatedOnce: true,
+        };
+      });
+    },
+    [onPieceDragBegin]
+  );
+
+  // Removes possible moves component
+  const deactivateSelectedPieceEffects = useCallback((targetSquare) => {
+    setSelectedPieceEffects((prev) => {
+      // Target square has been clicked once alread: effects need to be cleared
+      if (prev.activatedOnce)
+        return { possibleMoves: null, square: "", activatedOnce: false };
+      // Target square is dfferent than source square: old effects need to be cleared
+      if (targetSquare !== prev.square)
+        return { possibleMoves: null, square: "", activatedOnce: false };
+
+      // First click on target square
+      prev.activatedOnce = true;
+      return { ...prev };
+    });
+  }, []);
 
   return (
-    <div id="chess-board" className="bg-tan" ref={chessBoard}>
+    <div id="chess-board" className="bg-tan" ref={ref}>
+      {children}
       {
         /******************************************************
             Inactive Board Modal
@@ -30,29 +116,72 @@ function ChessBoard({
             Inactive Board Modal
         **************************************************** */
       }
-      <AxesLables boardOrientation={boardOrientation} theme={theme} />
+      <AxesLables
+        boardOrientation={boardOrientation}
+        theme={theme}
+        width={width}
+      />
+      {hoverSquareEffects.square && (
+        <HoverSquare
+          boardOrientation={boardOrientation}
+          hoverSquare={hoverSquareEffects.square}
+          touchDrag={hoverSquareEffects.touchDrag}
+        />
+      )}
+      {selectedPieceEffects.possibleMoves && selectedPieceEffects.square && (
+        <PossibleMoves
+          boardOrientation={boardOrientation}
+          possibleMoves={selectedPieceEffects.possibleMoves}
+          square={selectedPieceEffects.square}
+          // Functions
+          onPieceDrop={onPieceDrop}
+          deactivateSelectedPieceEffects={deactivateSelectedPieceEffects}
+          width={width}
+        />
+      )}
+      {move && (
+        <MovementAfterEffect
+          boardOrientation={boardOrientation}
+          sourceSquare={move.sourceSquare}
+          targetSquare={move.targetSquare}
+        />
+      )}
       {
         /******************************************************
             Board Pieces
         ************************************************* */
-        board &&
-          board.map((row) => {
+        position &&
+          position.map((row) => {
+            // null row
             if (!row) return null;
 
             // Iterate through each row
             return row.map((square) => {
+              // null Square
               if (!square) return null;
 
+              let sourceSquare = square.square;
+              let targetSquare = square.square;
+
               // Return Draggable piece
-              const piece = `${square.color}${square.type}`;
               return (
                 <DraggableElement
-                  key={square.square}
+                  key={JSON.stringify(square)}
+                  // Data
                   boardOrientation={boardOrientation}
-                  square={square.square}
-                  piece={piece}
+                  sourceSquare={sourceSquare}
+                  targetSquare={targetSquare}
+                  pieceName={square.type}
+                  pieceColor={square.color}
+                  canMovePieces={canMovePieces}
+                  // Functions
                   onPieceDrop={onPieceDrop}
-                  chessBoard={chessBoard}
+                  onSquareHover={handleSquareHover}
+                  activateSelectedPieceEffects={activateSelectedPieceEffects}
+                  deactivateSelectedPieceEffects={
+                    deactivateSelectedPieceEffects
+                  }
+                  chessBoard={ref}
                 />
               );
             });
@@ -65,4 +194,4 @@ function ChessBoard({
   );
 }
 
-export default ChessBoard;
+export default forwardRef(ChessBoard);

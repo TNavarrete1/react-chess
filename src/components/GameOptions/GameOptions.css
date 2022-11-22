@@ -4,7 +4,6 @@
     align-items: center;
     padding: 15px 30px 40px 30px;
     height: 100%;
-    font-family: var(--font-primary);
     color: var(--color-white);
 }
 #game-options header {
@@ -15,110 +14,4 @@
     margin-bottom: 35px;
     font-size: 60px;
     color: var(--bg-dark-yellow);
-}
-
-#option-list {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    row-gap: 10px;
-}
-#option-list header {
-    text-align: center;
-    font-size: 25px;
-}
-.option-button {
-    display: grid;
-    grid-template-areas: 
-        "icon h1"
-        "icon p";
-    grid-template-columns: min-content auto;
-    row-gap: 5px;
-    column-gap: 30px;
-    padding: 15px 30px;
-    text-align: start;
-    border-radius: 10px;
-    color: inherit;
-    background: var(--bg-dark-gray700);
-    cursor: pointer;
-}
-.option-button:hover {
-    background: var(--bg-dark-gray900);
-}
-.option-icon {
-    grid-area: icon;
-    justify-self: center;
-    align-self: center;
-    font-size: 40px;
-    color: var(--color);
-}
-.option h1 {
-    grid-area: h1;
-    font-size: 30px;
-}
-.option p {
-    grid-area: p;
-    color: var(--color-gray);
-}
-
-#team-list {
-    display: grid;
-    grid-template-areas: 
-        "header header header"
-        "white-team random-team black-team"
-        "play-button play-button play-button";
-        grid-template-rows: repeat(2, min-content) auto;
-    row-gap: 10px;
-    column-gap: 20px;
-    height: 100%;
-    text-align: center;
-}
-#team-list header {
-    grid-area: header;
-    font-size: 25px;
-}
-
-#white-team-icon {
-    grid-area: white-team;
-}
-#random-team-icon {
-    grid-area: random-team;
-}
-#black-team-icon {
-    grid-area: black-team;
-}
-.team-button {
-    background: transparent;
-    cursor: pointer;
-}
-.team-button svg {
-    margin: 5px;
-    padding: 15px;
-    font-size: 45px;
-    border-radius: 5px;
-    color: var(--color);
-    background: var(--bg);
-}
-.team-button-highlight {
-    box-shadow: inset 0 0 0 2px var(--bg-dark-yellow);
-    border-radius: 8px;
-}
-
-#start-game-button {
-    grid-area: play-button;
-    align-self: flex-end;
-    padding: 20px 35px;
-    height: min-content;
-    width: 100%;
-    font-size: 25px;
-    font-weight: 900;
-    border-radius: 10px;
-    color: var(--color-dark-gray900);
-    background: var(--bg-dark-yellow);
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-}
-#start-game-button:hover {
-    transform: scale(1.025);
-    box-shadow: 1px 1px 15px 1px var(--hover-yellow);
 }

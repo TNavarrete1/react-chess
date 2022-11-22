@@ -1,9 +1,8 @@
 #chess-board {
     position: relative;
-    justify-self: flex-start;
-    height: 90vh;
-    width: 90vh;
-    border-radius: 10px;
+    width: var(--chess-board-width);
+    aspect-ratio: 1;
+    border-radius: 8px;
     background-size: cover;
 }
 
@@ -14,7 +13,7 @@
     position: absolute;
     height: 100%;
     width: 100%;
-    border-radius: 10px;
+    border-radius: 8px;
     background: rgba(0, 0, 0, 0.3);
     z-index: 999;
 }
@@ -71,16 +70,34 @@
 /*************************************************
         Piece Backgrounds
 ********************************************************/
+
 .piece-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
-  height: 12.5%;
-  width: 12.5%;
-  background-repeat: no-repeat;
-  background-size: 100%;
-  background-color: transparent;
-  cursor: grab;
+    height: 12.5%;
+    width: 12.5%;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    z-index: 1;
+    cursor: grab;
+    touch-action: none;
 }
 
-.dragging {
+.mouse-drag {
     z-index: 999;
+}
+
+.touch-drag {
+    transform: scale(1.8);
+    z-index: 999;
+
+}
+
+.lock-screen {
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+    position: fixed;
 }

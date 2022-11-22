@@ -1,0 +1,22 @@
+#chess-board-wrapper {
+    --user-card-width: 60px;
+    --chess-board-width: max(300px, min(calc(100vw - 490px), calc(100vh - (var(--user-card-width) * 2))));;
+    display: grid;
+    grid-template-rows: var(--user-card-width) auto var(--user-card-width);
+    justify-self: center;
+    align-self: flex-start;
+}
+
+@media screen and (max-width: 1000px) {
+    #chess-board-wrapper {
+        align-self: center;
+        --chess-board-width: min(calc(100vh - (var(--user-card-width) * 2)), calc(100vw - 30px));
+    }
+}
+
+@media screen and (orientation: portrait) {
+    #chess-board-wrapper {
+        align-self: center;
+        --chess-board-width: min(calc(100vh - (var(--user-card-width) * 2)), calc(100vw - 30px));
+    }
+}

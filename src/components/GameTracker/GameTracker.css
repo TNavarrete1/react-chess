@@ -1,0 +1,6 @@
+#move-history-wrapper {
+    display: grid;
+    grid-template-rows: min-content auto repeat(2, min-content);
+    height: 100%;
+    width: 100%;
+}
