@@ -1,0 +1,99 @@
+#prompt-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 999;
+}
+
+#game-tracker-headers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    position: relative;
+    color: var(--color-white);
+}
+.header-tabs {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 0;
+    font-size: 15px;
+    color: var(--color-gray);
+    background: var(--bg-dark-gray700);
+}
+.header-tabs:hover {
+    color:var(--hover-gray);
+}
+#playing-tab {
+    color: inherit;
+    background: var(--bg-dark-gray500);
+}
+#playing-tab:hover {
+    color:inherit;
+}
+#new-game-tab {
+    cursor: pointer;
+}
+
+.header-tabs svg {
+    font-size: 25px;
+}
+
+#prompt {
+    display: grid;
+    grid-template-areas: 
+        "header header"
+        "cancel yes";
+    grid-template-columns: repeat(2, 1fr);
+    position: absolute;
+    column-gap: 5px;
+    row-gap: 10px;
+    top: calc(100% + 10px);
+    left: 50%;
+    padding: 15px;
+    width: 50%;
+    border-radius: 3px;
+    background: var(--bg-white);
+    z-index: 999;
+}
+#prompt::after {
+    --width: 20px;
+    content: "";
+    position: absolute;
+    top: calc(var(--width) / 2 * -1);
+    left: calc(50% - var(--width) / 2);
+    width: var(--width);
+    aspect-ratio: 1;
+    background: var(--bg-white);
+    transform: rotate(45deg);
+}
+#prompt header {
+    grid-area: header;
+    text-align: center;
+    color: var(--bg-dark-gray900);
+}
+.prompt-buttons {
+    padding: 10px 15px;
+    font-weight: 600;
+    border-radius: 3px;
+    cursor: pointer;
+}
+#cancel-button {
+    grid-area: cancel;
+    color: var(--color-gray900);
+    background: var(--bg-gray);
+}
+#cancel-button:hover {
+    background: var(--bg-light-gray);
+}
+#yes-button {
+    grid-area: yes;
+    color: var(color-dark-gray900);
+    background: var(--bg-dark-yellow);
+}
+#yes-button:hover {
+    background: var(--bg-yellow);
+}

@@ -1,0 +1,43 @@
+#option-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    row-gap: 10px;
+}
+#option-list header {
+    text-align: center;
+    font-size: 25px;
+}
+.option-button {
+    display: grid;
+    grid-template-areas: 
+        "icon h1"
+        "icon p";
+    grid-template-columns: min-content auto;
+    row-gap: 5px;
+    column-gap: 30px;
+    padding: 15px 30px;
+    text-align: start;
+    border-radius: 10px;
+    color: inherit;
+    background: var(--bg-dark-gray700);
+    cursor: pointer;
+}
+.option-button:hover {
+    background: var(--bg-dark-gray900);
+}
+.option-icon {
+    grid-area: icon;
+    justify-self: center;
+    align-self: center;
+    font-size: 40px;
+    color: var(--color);
+}
+.option h1 {
+    grid-area: h1;
+    font-size: 30px;
+}
+.option p {
+    grid-area: p;
+    color: var(--color-gray);
+}

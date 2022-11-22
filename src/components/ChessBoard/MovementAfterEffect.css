@@ -1,0 +1,6 @@
+.move-after-effect {
+    position: absolute;
+    height: 12.5%;
+    width: 12.5%;
+    background: rgba(247, 216, 74, 0.5);
+}

@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 // Utilites
 import { getAxesLabels } from "utilities/board";
 
-function AxesLables({ boardOrientation, theme }) {
+function AxesLables({ boardOrientation, theme, width }) {
   const [axesLabels, setAxesLabels] = useState(
     getAxesLabels(boardOrientation, theme)
   );
@@ -15,7 +15,7 @@ function AxesLables({ boardOrientation, theme }) {
   }, [boardOrientation, theme]);
 
   return (
-    <div id="axes-labes">
+    <div id="board-axes-wrapper">
       {axesLabels &&
         axesLabels.map((axesLabel) => {
           return (
@@ -26,6 +26,7 @@ function AxesLables({ boardOrientation, theme }) {
                 top: `${axesLabel.location.posY}%`,
                 left: `${axesLabel.location.posX}%`,
                 "--color": `var(--${axesLabel.color})`,
+                "--font-size": `${width * 0.03}px`,
               }}
             >
               <div className={axesLabel.className}>{axesLabel.id}</div>

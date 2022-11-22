@@ -1,8 +1,17 @@
+#board-axes-wrapper {
+    height: 100%;
+    width: 100%;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    -moz-user-select: none; /* Firefox */
+     user-select: none; /* Standard syntax */
+}
+
 .board-axes-labels {
     position: absolute;
     height: 12.5%;
     width: 12.5%;
-    font-size: 20px;
+    font-size: var(--font-size);
     font-weight: 600;
     color: var(--color);
 }
