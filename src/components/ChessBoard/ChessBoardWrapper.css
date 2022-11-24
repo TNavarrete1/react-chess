@@ -1,6 +1,6 @@
 #chess-board-wrapper {
     --user-card-width: 60px;
-    --chess-board-width: max(300px, min(calc(100vw - 490px), calc(100vh - (var(--user-card-width) * 2))));;
+    --chess-board-width: max(300px, min(calc(100vw - var(--side-card-max-width) - (var(--vertical-gutter) * 3)), calc(100vh - (var(--user-card-width) * 2) - (var(--horizontal-padding) * 2))));;
     display: grid;
     grid-template-rows: var(--user-card-width) auto var(--user-card-width);
     justify-self: center;
@@ -10,13 +10,65 @@
 @media screen and (max-width: 1000px) {
     #chess-board-wrapper {
         align-self: center;
-        --chess-board-width: min(calc(100vh - (var(--user-card-width) * 2)), calc(100vw - 30px));
+        --chess-board-width: min(calc(100vh - (var(--user-card-width) * 2) - (var(--horizontal-padding) * 2)), calc(100vw - (var(--vertical-padding) * 2)));
     }
 }
 
 @media screen and (orientation: portrait) {
     #chess-board-wrapper {
         align-self: center;
-        --chess-board-width: min(calc(100vh - (var(--user-card-width) * 2)), calc(100vw - 30px));
+        --chess-board-width: min(calc(100vh - (var(--user-card-width) * 2) - (var(--horizontal-padding) * 2)), calc(100vw - (var(--vertical-padding) * 2)));
     }
+}
+
+.player-card {
+    display: grid;
+    grid-template-areas: 
+        "avatar username ."
+        "avatar captures points";
+    grid-template-columns: min-content min-content auto;
+    grid-template-rows: 20px 30px;
+    column-gap: 20px;
+}
+.player-avatar {
+    grid-area: avatar;
+    align-self: center;
+    height: 50px;
+    width: 50px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+.player-avatar svg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    height: calc(100% - 20px);
+    width: calc(100% - 20px);
+}
+.username {
+    grid-area: username;
+    font-size: 14px;
+    color: var(--color-white);
+    white-space: nowrap;
+}
+.captured-pieces {
+    grid-area: captures;
+    justify-self: flex-start;
+    padding-top: 5px;
+    white-space: nowrap;
+}
+.piece-type {
+    margin-right: 12.5px;
+}
+.piece {
+    position: relative;
+    margin-right: -5px;
+    color: var(--color-white);
+    font-size: 20px;
+}
+.captured-points {
+    grid-area: points;
+    padding-top: 5px;
+    color: var(--color-gray);
 }
