@@ -30,7 +30,8 @@ function App() {
   const [moveHistory, setMoveHistory] = useState(null); // Stores player moves up to current move
   const [preview, setPreview] = useState({
     isPreviewing: false,
-    moveNum: null,
+    movedAfterPreview: false,
+    moveNum: 0,
   }); // tracks preview
   const [gameState, setGameState] = useState({
     gameStart: false,
@@ -41,6 +42,11 @@ function App() {
     team: "white", // default team
     gameMode: "",
   }); // Tracks options chosen before game start
+  const [lastMove, setLastMove] = useState({
+    validMove: false,
+    captured: null,
+    color: "",
+  });
 
   useEffect(() => {
     const resizeChessBoard = () => {
@@ -75,6 +81,17 @@ function App() {
       });
     }
 
+    setLastMove((prev) => {
+      prev.validMove = true;
+      if (move.captured) {
+        prev.captured = move.captured;
+        prev.color = move.color;
+      } else {
+        prev.captured = null;
+        prev.color = "";
+      }
+      return { ...prev };
+    });
     setPosition({
       board: game.board(),
       move: { sourceSquare: move.from, targetSquare: move.to },
@@ -93,6 +110,7 @@ function App() {
     setPreview((prev) => {
       return {
         isPreviewing: false,
+        movedAfterPreview: false,
         moveNum: prev.moveNum + 1,
       };
     });
@@ -137,11 +155,18 @@ function App() {
 
       // Move wasn't valid don't update board
       if (move === null) {
+        setLastMove((prev) => {
+          prev.validMove = false;
+          prev.captured = null;
+          prev.color = "";
+          return { ...prev };
+        });
         if (preview.isPreviewing) {
           game.loadPgn(positionHistory[positionHistory.length - 1].pgn);
           // Makes sure preview is reset if pieceDrop is done during a preview
           setPreview({
             isPreviewing: false,
+            movedAfterPreview: false,
             moveNum: positionHistory.length - 1,
           });
           // Moves pieces back to latest position on invalid move
@@ -155,6 +180,17 @@ function App() {
 
       // Move was valid so update board
       if (targetSquare !== sourceSquare) {
+        setLastMove((prev) => {
+          prev.validMove = true;
+          if (move.captured) {
+            prev.captured = move.captured;
+            prev.color = move.color;
+          } else {
+            prev.captured = null;
+            prev.color = "";
+          }
+          return { ...prev };
+        });
         setPosition({
           board: game.board(),
           move: { sourceSquare, targetSquare },
@@ -162,11 +198,18 @@ function App() {
         setMoveHistory(game.history({ verbose: true }));
         // Makes sure preview is reset if pieceDrop is done during a preview
         setPreview((prev) => {
+          prev.movedAfterPreview = false;
+          if (prev.isPreviewing) {
+            prev.movedAfterPreview = true;
+          }
+          prev.isPreviewing = false;
+          prev.moveNum = prev.moveNum + 1;
+
           return {
-            isPreviewing: false,
-            moveNum: prev.moveNum + 1,
+            ...prev,
           };
         });
+
         // Erases position history after current piece drop if it is done during a preview
         if (preview.isPreviewing) {
           // Remove history after current preview
@@ -276,11 +319,15 @@ function App() {
     setMoveHistory(null);
     setPositionHistory([{ board: game.board(), move: null, pgn: game.pgn() }]);
     setGameState({ gameStart: false, canMovePieces: false, team, gameMode });
-    setPreview({ isPreviewing: false, moveNum: null });
+    setPreview({
+      isPreviewing: false,
+      movedAfterPreview: false,
+      moveNum: null,
+    });
   };
 
   const previewPosition = (moveNum) => {
-    setPreview({ isPreviewing: true, moveNum });
+    setPreview({ isPreviewing: true, movedAfterPreview: false, moveNum });
 
     // Load current preview game data
     game.loadPgn(positionHistory[moveNum].pgn);
@@ -295,8 +342,13 @@ function App() {
     <div id="layout" ref={layout}>
       <ChessBoardWrapper
         boardOrientation={boardOrientation}
+        gameStart={gameState.gameStart}
+        gameOver={gameState.gameOver}
         gameMode={gameState.gameMode}
         team={gameState.team}
+        lastMove={lastMove}
+        movedAfterPreview={preview.movedAfterPreview}
+        currMoveNum={preview.moveNum}
         children={
           <ChessBoard
             ref={chessBoard}

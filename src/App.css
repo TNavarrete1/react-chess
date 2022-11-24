@@ -3,14 +3,17 @@ body, html {
 }
 
 #layout {
+    --horizontal-padding: 20px;
+    --vertical-padding: 15px;
+    --vertical-gutter: 30px;
+    --side-card-max-width: 400px;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    column-gap: 30px;
+    column-gap: var(--vertical-gutter);
     margin: 0 auto;
-    padding: 0 15px;
-    min-height: 100%;
+    padding: var(--horizontal-padding) var(--vertical-padding);
     max-width: 1980px;
     font-family: var(--font-primary);
 }
@@ -19,11 +22,10 @@ body, html {
 }
 
 #side-card {
-    margin: 30px 0;
     min-height: 500px;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 40px);
     width: 100%;
-    max-width: 400px;
+    max-width: var(--side-card-max-width);
     border-radius: 10px;
     background: var(--bg-dark-gray500);
     overflow: hidden;
