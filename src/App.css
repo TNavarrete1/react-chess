@@ -39,8 +39,7 @@ body, html {
         flex-direction: column;
     }
     #side-card {
-        margin: 0;
-        margin-bottom: 30px;
+        margin-top: 20px;
         height: 80vh;
         max-width: none;
     }
@@ -52,8 +51,7 @@ body, html {
     }
 
     #side-card {
-        margin: 0;
-        margin-bottom: 30px;
+        margin-top: 20px;
         height: 80vh;
         max-width: none;
     }

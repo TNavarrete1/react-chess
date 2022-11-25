@@ -224,14 +224,19 @@ export default function ChessBoardWrapper({
         bottomTeam = "black";
       }
 
-      // Switch captures
+      // Switch captures and points
       let topCaptures, bottomCaptures;
+      let topPoints, bottomPoints;
       if (topTeam === prev.top.team) {
         topCaptures = prev.top.captures;
+        topPoints = prev.top.capturePoints;
         bottomCaptures = prev.bottom.captures;
+        bottomPoints = prev.bottom.capturePoints;
       } else {
         topCaptures = prev.bottom.captures;
+        topPoints = prev.bottom.capturePoints;
         bottomCaptures = prev.top.captures;
+        bottomPoints = prev.top.capturePoints;
       }
 
       // Set teams
@@ -240,6 +245,9 @@ export default function ChessBoardWrapper({
       // Set captures
       prev.top.captures = topCaptures;
       prev.bottom.captures = bottomCaptures;
+      // Set points
+      prev.top.capturePoints = topPoints;
+      prev.bottom.capturePoints = bottomPoints;
 
       return { ...prev };
     });
