@@ -1,10 +1,15 @@
 body, html {
     background: var(--bg-dark-gray300);
 }
+#root {
+    overflow: scroll;
+}
 
 #layout {
-    --horizontal-padding: 20px;
-    --vertical-padding: 15px;
+    --layout-min-width: 280px;
+    --layout-max-width: 1980px;
+    --horizontal-margin: 20px;
+    --vertical-margin: 10px;
     --vertical-gutter: 30px;
     --side-card-max-width: 400px;
     display: flex;
@@ -12,9 +17,9 @@ body, html {
     align-items: center;
     position: relative;
     column-gap: var(--vertical-gutter);
-    margin: 0 auto;
-    padding: var(--horizontal-padding) var(--vertical-padding);
-    max-width: 1980px;
+    margin: var(--horizontal-margin) var(--vertical-margin);
+    min-width: var(--layout-min-width);
+    max-width: var(--layout-max-width);
     font-family: var(--font-primary);
 }
 #layout button{
@@ -26,7 +31,7 @@ body, html {
     height: calc(100vh - 40px);
     width: 100%;
     max-width: var(--side-card-max-width);
-    border-radius: 10px;
+    border-radius: 8px;
     background: var(--bg-dark-gray500);
     overflow: hidden;
     -webkit-user-select: none; /* Safari */

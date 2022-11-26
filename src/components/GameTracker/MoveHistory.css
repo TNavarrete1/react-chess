@@ -50,3 +50,15 @@
 .odd-round {
     background: var(--bg-dark-gray500);
 }
+
+@media screen and ((max-width: 375px) or (max-height: 375px)) {
+    #moves-viewer header {
+        font-size: 12px;
+    }
+    .move {
+        font-size: 13px;
+    }
+    #move-list-bg {
+        grid-auto-rows: 38.5px;
+    }
+}

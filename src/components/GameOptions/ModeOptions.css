@@ -2,9 +2,10 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    row-gap: 10px;
+    row-gap: 15px;
 }
 #option-list header {
+    margin-bottom: 10px;
     text-align: center;
     font-size: 25px;
 }
@@ -33,11 +34,30 @@
     font-size: 40px;
     color: var(--color);
 }
-.option h1 {
+.option-button h1 {
     grid-area: h1;
     font-size: 30px;
 }
-.option p {
+.option-button p {
     grid-area: p;
     color: var(--color-gray);
+}
+
+@media screen and ((max-width: 375px) or (max-height: 375px)) {
+    #option-list header {
+        font-size: 20px;
+    }
+    .option-button {
+        padding: 15px 20px;
+        column-gap: 20px;
+    }
+    .option-icon {
+        font-size: 33px;
+    }
+    .option-button h1 {
+        font-size: 24px;
+    }
+    .option-button p {
+        font-size: 13px;
+    }
 }

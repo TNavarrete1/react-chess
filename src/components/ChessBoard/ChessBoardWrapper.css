@@ -1,8 +1,9 @@
 #chess-board-wrapper {
     --user-card-width: 60px;
-    --chess-board-width: max(300px, min(calc(100vw - var(--side-card-max-width) - (var(--vertical-gutter) * 3)), calc(100vh - (var(--user-card-width) * 2) - (var(--horizontal-padding) * 2))));;
+    --chess-board-width: max(min(calc(100vw - var(--side-card-max-width) - (var(--vertical-gutter) * 3)), calc(100vh - (var(--user-card-width) * 2) - (var(--horizontal-margin) * 2))));;
     display: grid;
     grid-template-rows: var(--user-card-width) auto var(--user-card-width);
+    grid-template-columns: min-content;
     justify-self: center;
     align-self: flex-start;
 }
@@ -10,14 +11,14 @@
 @media screen and (max-width: 1000px) {
     #chess-board-wrapper {
         align-self: center;
-        --chess-board-width: min(calc(100vh - (var(--user-card-width) * 2) - (var(--horizontal-padding) * 2)), calc(100vw - (var(--vertical-padding) * 2)));
+        --chess-board-width: min(calc(100vh - (var(--user-card-width) * 2) - (var(--horizontal-margin) * 2)), calc(100vw - (var(--vertical-margin) * 2)));
     }
 }
 
 @media screen and (orientation: portrait) {
     #chess-board-wrapper {
         align-self: center;
-        --chess-board-width: min(calc(100vh - (var(--user-card-width) * 2) - (var(--horizontal-padding) * 2)), calc(100vw - (var(--vertical-padding) * 2)));
+        --chess-board-width: min(calc(100vh - (var(--user-card-width) * 2) - (var(--horizontal-margin) * 2)), calc(100vw - (var(--vertical-margin) * 2)));
     }
 }
 
@@ -29,6 +30,7 @@
     grid-template-columns: min-content min-content auto;
     grid-template-rows: 20px 30px;
     column-gap: 20px;
+    min-width: var(--layout-min-width);
 }
 .player-avatar {
     grid-area: avatar;
@@ -39,12 +41,13 @@
     overflow: hidden;
 }
 .player-avatar svg {
+    --padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px;
-    height: calc(100% - 20px);
-    width: calc(100% - 20px);
+    padding: var(--padding);
+    height: calc(100% - (var(--padding) * 2));
+    width: calc(100% - (var(--padding) * 2));
 }
 .username {
     grid-area: username;
@@ -71,4 +74,26 @@
     grid-area: points;
     padding-top: 5px;
     color: var(--color-gray);
+}
+
+@media screen and ((max-width: 375px) or (max-height: 375px)){
+    .player-card {
+        column-gap: 10px;
+    }
+    .player-avatar {
+        width: 40px;
+        height: 40px;
+    }
+    .player-avatar svg{
+        --padding: 7.5px;
+    }
+    .username {
+        font-size: 12px;
+    }
+    .piece {
+        font-size: 16px;
+    }
+    .captured-points {
+        font-size: 13px;
+    }
 }

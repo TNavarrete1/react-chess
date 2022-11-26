@@ -35,6 +35,7 @@
     color:inherit;
 }
 #new-game-tab {
+    width: 100%;
     cursor: pointer;
 }
 
@@ -52,9 +53,12 @@
     column-gap: 5px;
     row-gap: 10px;
     top: calc(100% + 10px);
-    left: 50%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
     padding: 15px;
-    width: 50%;
+    width: 100%;
+    max-width: 200px;
     border-radius: 3px;
     background: var(--bg-white);
     z-index: 999;
@@ -73,11 +77,13 @@
 #prompt header {
     grid-area: header;
     text-align: center;
+    font-size: 15px;
     color: var(--bg-dark-gray900);
 }
 .prompt-buttons {
     padding: 10px 15px;
     font-weight: 600;
+    font-size: 14px;
     border-radius: 3px;
     cursor: pointer;
 }
@@ -96,4 +102,23 @@
 }
 #yes-button:hover {
     background: var(--bg-yellow);
+}
+
+@media screen and ((max-width: 375px) or (max-height: 375px)){
+    .header-tabs {
+        font-size: 13px;
+    }
+    .header-tabs svg {
+        font-size: 20px;
+    }
+    #prompt {
+        padding: 15px 10px;
+    }
+    #prompt header {
+        font-size: 13px;
+    }
+    .prompt-buttons {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
 }
