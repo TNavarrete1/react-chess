@@ -52,8 +52,6 @@ function GameController({
           <div
             className="hover-content"
             style={{
-              "--left": "50%",
-              "--right": "5%",
               "--bottom": "calc(100% - 2px)",
             }}
           >
@@ -70,8 +68,6 @@ function GameController({
           <div
             className="hover-content"
             style={{
-              "--left": "calc(50% - 5px)",
-              "--right": "20%",
               "--bottom": "calc(100% - 2px)",
             }}
           >
@@ -90,8 +86,6 @@ function GameController({
           <div
             className="hover-content"
             style={{
-              "--left": "47.5%",
-              "--right": "10%",
               "--bottom": "calc(100% - 2px)",
             }}
           >
@@ -108,8 +102,6 @@ function GameController({
           <div
             className="hover-content"
             style={{
-              "--left": "52%",
-              "--right": "23%",
               "--bottom": "calc(100% - 2px)",
             }}
           >
@@ -125,8 +117,6 @@ function GameController({
             <div
               className="hover-content"
               style={{
-                "--left": "53%",
-                "--right": "-80%",
                 "--bottom": "calc(100% + 10px)",
               }}
             >
@@ -138,8 +128,6 @@ function GameController({
             <div
               className="hover-content"
               style={{
-                "--left": "57%",
-                "--right": "-80%",
                 "--bottom": "calc(100% + 10px)",
               }}
             >

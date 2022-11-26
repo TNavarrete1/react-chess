@@ -15,3 +15,15 @@
     font-size: 60px;
     color: var(--bg-dark-yellow);
 }
+
+@media screen and ((max-width: 375px) or (max-height: 375px)) {
+    #game-options {
+        padding: 15px 15px 40px 15px;
+    }
+    #game-options header {
+        font-size: 33px;
+    }
+    #chess-icon {
+        font-size: 53px;
+    }
+}

@@ -4,6 +4,7 @@
     aspect-ratio: 1;
     border-radius: 8px;
     background-size: cover;
+    min-width: var(--layout-min-width);
 }
 
 #board-modal {

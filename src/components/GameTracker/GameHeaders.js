@@ -30,29 +30,35 @@ function GameHeaders({ resetGame }) {
         <FontAwesomeIcon icon={faChessBoard} />
         <span>Playing</span>
       </button>
-      <button id="new-game-tab" className="header-tabs" onClick={promptNewGame}>
-        <FontAwesomeIcon icon={faSquarePlus} />
-        <span>New Game</span>
-      </button>
-      {isComponentVisible && (
-        <div ref={ref} id="prompt">
-          <header>Start a new game?</header>
-          <button
-            id="cancel-button"
-            className="prompt-buttons"
-            onClick={removePromptNewGame}
-          >
-            cancel
-          </button>
-          <button
-            id="yes-button"
-            className="prompt-buttons"
-            onClick={createNewGame}
-          >
-            Yes
-          </button>
-        </div>
-      )}
+      <div style={{ position: "relative" }}>
+        <button
+          id="new-game-tab"
+          className="header-tabs"
+          onClick={promptNewGame}
+        >
+          <FontAwesomeIcon icon={faSquarePlus} />
+          <span>New Game</span>
+        </button>
+        {isComponentVisible && (
+          <div ref={ref} id="prompt">
+            <header>Start a new game?</header>
+            <button
+              id="cancel-button"
+              className="prompt-buttons"
+              onClick={removePromptNewGame}
+            >
+              cancel
+            </button>
+            <button
+              id="yes-button"
+              className="prompt-buttons"
+              onClick={createNewGame}
+            >
+              Yes
+            </button>
+          </div>
+        )}
+      </div>
     </header>
   );
 }

@@ -28,6 +28,18 @@ function DraggableElement({
   const piece = useRef();
   const touchObject = useRef();
 
+  // Helper functions
+  const getElOffsets = (el) => {
+    const offsets = { left: 0, top: 0 };
+    while (el.offsetParent) {
+      offsets.left += el.offsetLeft;
+      offsets.top += el.offsetTop;
+      el = el.offsetParent;
+    }
+
+    return offsets;
+  };
+
   // Runs when piece is moved outside of chessboard
   const handleOutOfBounds = () => {
     setdraggingState((prev) => {
@@ -58,25 +70,23 @@ function DraggableElement({
   const onDrag = useCallback(
     (e) => {
       // Prevents text selection during drag
-      if (e.type === "mousemove") {
-        e.preventDefault();
-      } else if (e.type === "touchmove") {
+      e.preventDefault();
+      if (e.type === "touchmove") {
         touchObject.current = e.targetTouches[0];
       }
 
       // Get square being hovered over and active hover effect
       const singlesquareSizePx = chessBoard.current.clientWidth / 8;
       const singlesquareSizePercent = 12.5;
+      const chessBoardOffsets = getElOffsets(chessBoard.current);
       const squarePosX =
         Math.floor(
-          ((e.clientX || touchObject.current.pageX) -
-            chessBoard.current.offsetLeft) /
+          ((e.clientX || touchObject.current.pageX) - chessBoardOffsets.left) /
             singlesquareSizePx
         ) * singlesquareSizePercent;
       const squarePosY =
         Math.floor(
-          ((e.clientY || touchObject.current.pageY) -
-            chessBoard.current.offsetTop) /
+          ((e.clientY || touchObject.current.pageY) - chessBoardOffsets.top) /
             singlesquareSizePx
         ) * singlesquareSizePercent;
       const sourceSquare = getBoardSquare(
@@ -93,14 +103,12 @@ function DraggableElement({
       // Get mouse location relative to chessboard
       const halfOfPieceSizePercent = 6.25;
       let posX =
-        (((e.clientX || touchObject.current.pageX) -
-          chessBoard.current.offsetLeft) /
+        (((e.clientX || touchObject.current.pageX) - chessBoardOffsets.left) /
           chessBoard.current.clientWidth) *
           100 -
         halfOfPieceSizePercent;
       let posY =
-        (((e.clientY || touchObject.current.pageY) -
-          chessBoard.current.offsetTop) /
+        (((e.clientY || touchObject.current.pageY) - chessBoardOffsets.top) /
           chessBoard.current.clientWidth) *
           100 -
         halfOfPieceSizePercent;
@@ -133,8 +141,8 @@ function DraggableElement({
 
   const onDragDrop = useCallback(
     (e) => {
+      e.preventDefault();
       if (e.type === "touchend") {
-        e.preventDefault();
         document.querySelector("body").classList.remove("lock-screen");
       }
 
@@ -147,16 +155,15 @@ function DraggableElement({
       // Get position of square where chess piece is dropped
       const singlesquareSizePx = chessBoard.current.clientWidth / 8;
       const singlesquareSizePercent = 12.5;
+      const chessBoardOffsets = getElOffsets(chessBoard.current);
       const posX =
         Math.floor(
-          ((e.clientX || touchObject.current.pageX) -
-            chessBoard.current.offsetLeft) /
+          ((e.clientX || touchObject.current.pageX) - chessBoardOffsets.left) /
             singlesquareSizePx
         ) * singlesquareSizePercent;
       const posY =
         Math.floor(
-          ((e.clientY || touchObject.current.pageY) -
-            chessBoard.current.offsetTop) /
+          ((e.clientY || touchObject.current.pageY) - chessBoardOffsets.top) /
             singlesquareSizePx
         ) * singlesquareSizePercent;
 
@@ -212,23 +219,22 @@ function DraggableElement({
 
       // Window events to track drag and drop outside of chessboard
       window.addEventListener("mousemove", onDrag);
-      window.addEventListener("touchmove", onDrag);
+      window.addEventListener("touchmove", onDrag, { passive: false });
       window.addEventListener("mouseup", onDragDrop);
-      window.addEventListener("touchend", onDragDrop);
+      window.addEventListener("touchend", onDragDrop, { passive: false });
 
       // Get square being hovered over and active hover and possible moves effect
       const singlesquareSizePx = chessBoard.current.clientWidth / 8;
       const singlesquareSizePercent = 12.5;
+      const chessBoardOffsets = getElOffsets(chessBoard.current);
       const squarePosX =
         Math.floor(
-          ((e.clientX || touchObject.current.pageX) -
-            chessBoard.current.offsetLeft) /
+          ((e.clientX || touchObject.current.pageX) - chessBoardOffsets.left) /
             singlesquareSizePx
         ) * singlesquareSizePercent;
       const squarePosY =
         Math.floor(
-          ((e.clientY || touchObject.current.pageY) -
-            chessBoard.current.offsetTop) /
+          ((e.clientY || touchObject.current.pageY) - chessBoardOffsets.top) /
             singlesquareSizePx
         ) * singlesquareSizePercent;
       const sourceSquare = getBoardSquare(
@@ -246,14 +252,12 @@ function DraggableElement({
       // Snap piece position to Mouse
       const halfOfPieceSize = 6.25;
       const posX =
-        (((e.clientX || touchObject.current.pageX) -
-          chessBoard.current.offsetLeft) /
+        (((e.clientX || touchObject.current.pageX) - chessBoardOffsets.left) /
           chessBoard.current.clientWidth) *
           100 -
         halfOfPieceSize;
       const posY =
-        (((e.clientY || touchObject.current.pageY) -
-          chessBoard.current.offsetTop) /
+        (((e.clientY || touchObject.current.pageY) - chessBoardOffsets.top) /
           chessBoard.current.clientWidth) *
           100 -
         halfOfPieceSize;
