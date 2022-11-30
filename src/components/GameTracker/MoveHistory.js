@@ -71,60 +71,73 @@ function MoveHistory({ moveHistory, moveNum, previewPosition }) {
     previewPosition(moveNum);
   };
 
+  // Helper functions
+  const renderMoveSan = (move, index, moveHistoryLen) => {
+    const pieceIconIndex = getPieceNameIndexInSan(move);
+    let pieceComponent = move.san;
+    if (pieceIconIndex !== -1) {
+      pieceComponent = (
+        <>
+          {move.san.substr(0, pieceIconIndex)}
+          <FontAwesomeIcon
+            icon={pieceNameToIcon(move.piece, move.color)}
+            style={{ marginRight: "3px" }}
+          />
+          {move.san.substr(pieceIconIndex + 1, move.san.length)}
+        </>
+      );
+    }
+    const moveSan = (
+      <span
+        className={`move-san${moveHistoryLen > 1 ? " move-san-clickable" : ""}${
+          moveNum === index + 1 ? " active-move-san" : ""
+        }`}
+        data-move={index + 1}
+        onClick={moveHistoryLen > 1 ? previewPastMove : null}
+      >
+        {pieceComponent}
+      </span>
+    );
+
+    return moveSan;
+  };
+
+  const renderMoves = (moveHistory) => {
+    // Transformes move history into rows of move pairs
+    const moveRows = [];
+    for (let row = 0; row < Math.ceil(moveHistory.length / 2); row++) {
+      const startingIndex = row * 2;
+      const endingIndex = startingIndex + 2;
+      // Gets pairs for a row
+      moveRows.push(moveHistory.slice(startingIndex, endingIndex));
+    }
+
+    // Moves components
+    const moves = moveRows.map((move, index) => {
+      return (
+        <div
+          key={JSON.stringify({ ...move, index })}
+          className={`move-row ${index % 2 === 0 ? "even-round" : "odd-round"}`}
+        >
+          <span>{index + 1}</span>
+          <span className="move">
+            {renderMoveSan(move[0], index * 2, moveHistory.length)}
+          </span>
+          <span className="move">
+            {move[1] &&
+              renderMoveSan(move[1], index * 2 + 1, moveHistory.length)}
+          </span>
+        </div>
+      );
+    });
+
+    return moves;
+  };
+
   return (
     <div ref={movesViewer} id="moves-viewer">
       <header>Move History</header>
-      <div id="move-list-bg">
-        {moveHistory &&
-          moveHistory.map((move, index) => {
-            if (index % 2 === 1) return null;
-            return (
-              <div
-                key={JSON.stringify({ ...move, index })}
-                className={
-                  (Math.floor(index / 2) + 1) % 2 === 0
-                    ? "even-round"
-                    : "odd-round"
-                }
-              ></div>
-            );
-          })}
-      </div>
-      <div id="move-list">
-        {moveHistory &&
-          moveHistory.map((move, index) => {
-            return (
-              <div key={JSON.stringify({ ...move, index })} className="move">
-                <span>
-                  {index % 2 === 0 && `${Math.floor(index / 2) + 1}.`}
-                </span>
-                <span
-                  className={`move-san${
-                    moveHistory.length > 1 ? " move-san-clickable" : ""
-                  }${moveNum === index + 1 ? " active-move-san" : ""}`}
-                  data-move={index + 1}
-                  onClick={moveHistory.length > 1 ? previewPastMove : null}
-                >
-                  {getPieceNameIndexInSan(move) !== -1 ? (
-                    <>
-                      {move.san.substr(0, getPieceNameIndexInSan(move))}
-                      <FontAwesomeIcon
-                        icon={pieceNameToIcon(move.piece, move.color)}
-                        style={{ marginRight: "3px" }}
-                      />
-                      {move.san.substr(
-                        getPieceNameIndexInSan(move) + 1,
-                        move.san.length
-                      )}
-                    </>
-                  ) : (
-                    move.san
-                  )}
-                </span>
-              </div>
-            );
-          })}
-      </div>
+      <div id="move-list">{moveHistory && renderMoves(moveHistory)}</div>
     </div>
   );
 }
