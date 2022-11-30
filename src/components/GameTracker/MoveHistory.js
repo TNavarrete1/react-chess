@@ -49,7 +49,10 @@ const getPieceNameIndexInSan = (move) => {
 
   // Look for piece name index in san string
   for (let pieceName of pieceNameList) {
-    if (move.san.indexOf(pieceName) !== -1) {
+    if (
+      move.piece === pieceName.toLowerCase() &&
+      move.san.indexOf(pieceName) !== -1
+    ) {
       pieceNameIndex = move.san.indexOf(pieceName);
       break;
     }
