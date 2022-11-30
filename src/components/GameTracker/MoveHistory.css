@@ -8,17 +8,21 @@
     padding: 15px 0;
     font-size: 14px;
     text-align: center;
-    border-bottom: 2px solid var(--bg-dark-gray100)
+    border-bottom: 2px solid var(--bg-dark-gray100);
 }
 #move-list {
-    --left-offset: 20px;
-    display: grid;
-    grid-template-columns: calc(50% - var(--left-offset)) auto;
-    grid-auto-rows: min-content;
+    display: flex;
+    flex-direction: column;
+}
+.move-row {
+    display:grid;
+    grid-template-columns: 20px repeat(2, 1fr);
+    grid-auto-rows: 43px;
+    align-items: center;
+    padding: 0 15px;
 }
 .move {
     display: flex;
-    padding: 8px 0;
     padding-left: var(--left-offset);
     gap: 15px;
     z-index: 2;
@@ -36,14 +40,6 @@
 .move-san-clickable {
     cursor: pointer;
 }
-
-#move-list-bg {
-    display: grid;
-    grid-auto-rows: 43px;
-    position: absolute;
-    width: 100%;
-    z-index: 1;
-}
 .even-round {
     background: var(--bg-dark-gray100);
 }
@@ -55,10 +51,14 @@
     #moves-viewer header {
         font-size: 12px;
     }
-    .move {
+    #move-list {
+        grid-auto-rows: 38.5px;
+        
+    }
+    .move-row {
         font-size: 13px;
     }
-    #move-list-bg {
-        grid-auto-rows: 38.5px;
+    .move {
+        gap: 5px;
     }
 }
