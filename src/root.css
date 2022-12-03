@@ -1,66 +1,65 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap");
 /* Strip elements of default values */
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    border: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
 }
 
 /* CSS variables */
 :root {
-    /* layout */
-    --layout-max-width: 1200px;
+  /* layout */
+  --layout-max-width: 1200px;
 
-    /* Fonts */
-    --font-primary: 'Poppins', sans-serif;
-    
-    /* Colors */
-    --color-black: #141414;
-    --color-white: #fff8f8;
-    --color-gray: #c2c2c2;
-    --color-gray300: #a9a9a9;
-    --color-gray900: #505050;
-    --color-dark-blue: #2d2d69;
-    --color-dark-gray100: #3f3f3f;
-    --color-dark-gray700: #1c1c1c;
-    --color-dark-gray900: #090909;
+  /* Fonts */
+  --font-primary: "Poppins", sans-serif;
 
+  /* Colors */
+  --color-black: #141414;
+  --color-white: #fff8f8;
+  --color-gray: #c2c2c2;
+  --color-gray300: #a9a9a9;
+  --color-gray900: #505050;
+  --color-dark-blue: #2d2d69;
+  --color-dark-gray100: #3f3f3f;
+  --color-dark-gray700: #1c1c1c;
+  --color-dark-gray900: #090909;
 
-    /* Bg Colors */
-    --bg-primary: #53bdb8;
-    --bg-secondary: rgb(127, 166, 80);
-    --bg-black: #141414;
-    --bg-gray: #dadada;
-    --bg-gray500: #ababab;
-    --bg-white: #fff8f8;
-    --bg-dark-blue: #2d2d69;
-    --bg-blue: #6767f0;
-    --bg-red: #ed6262;
-    --bg-green: #a8d254;
-    --bg-yellow: #f4f14a;
-    --bg-light-secondary: rgb(178, 207, 142);
-    --bg-light-gray: #e3e3e3;
-    --bg-dark-primary: #337c78;
-    --bg-dark-yellow: #e1de3f;
-    --bg-dark-gray100: #3f3f3f;
-    --bg-dark-gray300: #2f2f2f;
-    --bg-dark-gray500: #252525;
-    --bg-dark-gray700: #1c1c1c;
-    --bg-dark-gray900: #090909;
+  /* Bg Colors */
+  --bg-primary: #53bdb8;
+  --bg-secondary: rgb(127, 166, 80);
+  --bg-black: #141414;
+  --bg-gray: #dadada;
+  --bg-gray500: #ababab;
+  --bg-white: #fff8f8;
+  --bg-dark-blue: #2d2d69;
+  --bg-blue: #6767f0;
+  --bg-red: #ed6262;
+  --bg-green: #a8d254;
+  --bg-yellow: #f4f14a;
+  --bg-light-secondary: rgb(178, 207, 142);
+  --bg-light-gray: #e3e3e3;
+  --bg-dark-primary: #337c78;
+  --bg-dark-yellow: #e1de3f;
+  --bg-dark-gray100: #3f3f3f;
+  --bg-dark-gray300: #2f2f2f;
+  --bg-dark-gray500: #252525;
+  --bg-dark-gray700: #1c1c1c;
+  --bg-dark-gray900: #090909;
 
-    /* Transparent Bg Colors */
-    --bg-transparent-dark-gray900: #090909ce;
-    --bg-transparent-gray500: #ababab51;
-    --bg-transparent-white: #ffffff30;
+  /* Transparent Bg Colors */
+  --bg-transparent-dark-gray900: #090909ce;
+  --bg-transparent-gray500: #ababab51;
+  --bg-transparent-white: #ffffff30;
 
-    /* Hover Color */
-    --hover-yellow: rgba(255, 247, 0, 0.425);
-    --hover-gray: #e3e2e2;
+  /* Hover Color */
+  --hover-yellow: rgba(255, 247, 0, 0.425);
+  --hover-gray: #ececec;
 
-    /* Chess Board Colors */
-    --color-tan-dark: rgb(176, 116, 38);
-    --color-tan-light: rgb(253, 210, 137);
+  /* Chess Board Colors */
+  --color-tan-dark: rgb(176, 116, 38);
+  --color-tan-light: rgb(253, 210, 137);
 }

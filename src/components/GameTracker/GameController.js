@@ -35,105 +35,48 @@ function GameController({
     previewPosition(0);
   };
 
-  const movePreviewEnd = () => {
+  const movePreviewEnd = (e) => {
     previewPosition(moveHistory.length);
+  };
+
+  const renderClickableIconWithInfo = (btnFunction, iconName, infoTxt) => {
+    const iconContainer = (
+      <div className="icon-btn-container hover-content-wrapper">
+        <div className="hover-content">{infoTxt}</div>
+        <div className="hover-content-carret"></div>
+        <button
+          className="controller-button"
+          onClick={moveHistory && moveHistory.length > 1 ? btnFunction : null}
+        >
+          <FontAwesomeIcon icon={iconName} />
+        </button>
+      </div>
+    );
+
+    return iconContainer;
   };
 
   return (
     <div id="game-controller-wrapper">
       <div id="move-history-controller">
-        <button
-          className="controller-button hover-content-wrapper"
-          onClick={
-            moveHistory && moveHistory.length > 1 ? movePreviewBeginning : null
-          }
-        >
-          <FontAwesomeIcon icon={faAnglesLeft} />
-          <div
-            className="hover-content"
-            style={{
-              "--bottom": "calc(100% - 2px)",
-            }}
-          >
-            Beginning
-          </div>
-        </button>
-        <button
-          className="controller-button hover-content-wrapper"
-          onClick={
-            moveHistory && moveHistory.length > 1 ? movePreviewBackOnce : null
-          }
-        >
-          <FontAwesomeIcon icon={faAngleLeft} />
-          <div
-            className="hover-content"
-            style={{
-              "--bottom": "calc(100% - 2px)",
-            }}
-          >
-            Back
-          </div>
-        </button>
-        <button
-          className="controller-button hover-content-wrapper"
-          onClick={
-            moveHistory && moveHistory.length > 1
-              ? movePreviewForwardOnce
-              : null
-          }
-        >
-          <FontAwesomeIcon icon={faAngleRight} />
-          <div
-            className="hover-content"
-            style={{
-              "--bottom": "calc(100% - 2px)",
-            }}
-          >
-            Forward
-          </div>
-        </button>
-        <button
-          className="controller-button hover-content-wrapper"
-          onClick={
-            moveHistory && moveHistory.length > 1 ? movePreviewEnd : null
-          }
-        >
-          <FontAwesomeIcon icon={faAnglesRight} />
-          <div
-            className="hover-content"
-            style={{
-              "--bottom": "calc(100% - 2px)",
-            }}
-          >
-            Ending
-          </div>
-        </button>
+        {renderClickableIconWithInfo(
+          movePreviewBeginning,
+          faAnglesLeft,
+          "Start"
+        )}
+        {renderClickableIconWithInfo(movePreviewBackOnce, faAngleLeft, "Back")}
+        {renderClickableIconWithInfo(
+          movePreviewForwardOnce,
+          faAngleRight,
+          "Forward"
+        )}
+        {renderClickableIconWithInfo(movePreviewEnd, faAnglesRight, "End")}
       </div>
       <div id="move-history-footer">
         <button id="settings-button">Settings</button>
         <div className="footer-icons">
-          <span className="hover-content-wrapper" onClick={handleBoardFlip}>
-            <FontAwesomeIcon icon={faRotate} />
-            <div
-              className="hover-content"
-              style={{
-                "--bottom": "calc(100% + 10px)",
-              }}
-            >
-              Flip Board
-            </div>
-          </span>
-          <span className="hover-content-wrapper">
-            <FontAwesomeIcon icon={faFlagCheckered} />
-            <div
-              className="hover-content"
-              style={{
-                "--bottom": "calc(100% + 10px)",
-              }}
-            >
-              Resign
-            </div>
-          </span>
+          {renderClickableIconWithInfo(handleBoardFlip, faRotate, "Flip Board")}
+          {renderClickableIconWithInfo(null, faFlagCheckered, "Resign")}
         </div>
       </div>
     </div>

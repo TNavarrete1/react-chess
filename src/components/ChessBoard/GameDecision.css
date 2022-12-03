@@ -1,91 +1,94 @@
 #game-decision-modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    z-index: 999;
+  display: flex;
+  position: absolute;
+  padding-top: max(20%, 50px);
+  height: 100%;
+  width: 100%;
+  z-index: 999;
 }
 .modal-card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 20%;
-    padding: 20px;
-    height: 500px;
-    width:100%;
-    max-width: 350px;
-    background: var(--bg-white);
-    border-radius: 8px;
-    overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  padding: 20px;
+  height: 500px;
+  width: 100%;
+  max-width: 350px;
+  background: var(--bg-white);
+  border-radius: 8px;
+  overflow: hidden;
+  transform: translateY(-14%);
 }
 #header-bg-circle {
-    position: absolute;
-    bottom: calc(100% - 120px);
-    margin: 0 auto;
-    height: 700px;
-    width: 700px;
-    background: var(--bg-primary);
-    border-radius: 50%;
+  position: absolute;
+  bottom: calc(100% - 120px);
+  margin: 0 auto;
+  height: 700px;
+  width: 700px;
+  background: var(--bg-primary);
+  border-radius: 50%;
 }
 .modal-card header {
-    position: absolute;
-    top: 20px;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    font-size: 35px;
-    font-weight: 600;
-    text-shadow: 1px 4px 1px var(--bg-dark-primary);
-    color: var(--color-white);
-    z-index: 1;
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 35px;
+  font-weight: 600;
+  text-shadow: 1px 4px 1px var(--bg-dark-primary);
+  color: var(--color-white);
+  z-index: 1;
 }
 
 #exit-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 5px;
-    font-size: 18px;
-    color: var(--color-white);
-    z-index: 999;
-    cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px;
+  font-size: 18px;
+  color: var(--color-white);
+  z-index: 999;
+  cursor: pointer;
 }
 
 #icon-winner-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    gap: 15px;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 15px;
+  text-align: center;
 }
 #icon-winner-wrapper p {
-    font-size: 22.5px;
-    font-weight: 400;
-    color: var(--color-dark-gray700);
+  font-size: 22.5px;
+  font-weight: 400;
+  color: var(--color-dark-gray700);
 }
 #icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: min-content;
-    width: min-content;
-    border-style: solid;
-    border-width: 15px;
-    border-color: var(--bg-primary);
-    border-radius: 5px;
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: min-content;
+  width: min-content;
+  border-style: solid;
+  border-width: 15px;
+  border-color: var(--bg-primary);
+  border-radius: 5px;
 }
 #icon svg {
-    padding: 25px;
-    font-size: 80px;
-    color: var(--bg-yellow);
-    background: var(--bg-dark-gray100);
+  padding: 25px;
+  font-size: 80px;
+  color: var(--bg-yellow);
+  background: var(--bg-dark-gray100);
 }

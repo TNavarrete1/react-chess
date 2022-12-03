@@ -8,18 +8,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRobot, faCrown, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export default function GameDecision({ gameOver, decisionTxt, winnerTxt }) {
+  //Helper functions
+
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
+
+  const removeDecisionCard = () => {
+    setIsComponentVisible(false);
+  };
 
   useEffect(() => {
     if (gameOver) {
       setIsComponentVisible(true);
     }
   }, [gameOver, setIsComponentVisible]);
-
-  const removeDecisionCard = () => {
-    setIsComponentVisible(false);
-  };
 
   return (
     <>

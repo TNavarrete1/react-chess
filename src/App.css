@@ -1,63 +1,64 @@
-body, html {
-    background: var(--bg-dark-gray300);
+body,
+html {
+  background: var(--bg-dark-gray300);
 }
 #root {
-    overflow: scroll;
+  overflow: auto;
 }
 
 #layout {
-    --layout-min-width: 280px;
-    --layout-max-width: 1980px;
-    --horizontal-margin: 20px;
-    --vertical-margin: 10px;
-    --vertical-gutter: 30px;
-    --side-card-max-width: 400px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    column-gap: var(--vertical-gutter);
-    margin: var(--horizontal-margin) var(--vertical-margin);
-    min-width: var(--layout-min-width);
-    max-width: var(--layout-max-width);
-    font-family: var(--font-primary);
+  --layout-min-width: 280px;
+  --layout-max-width: 1980px;
+  --horizontal-margin: 20px;
+  --vertical-margin: 10px;
+  --vertical-gutter: 30px;
+  --side-card-max-width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  column-gap: var(--vertical-gutter);
+  margin: var(--horizontal-margin) var(--vertical-margin);
+  min-width: var(--layout-min-width);
+  max-width: var(--layout-max-width);
+  font-family: var(--font-primary);
 }
-#layout button{
-    font-family: inherit;
+#layout button {
+  font-family: inherit;
 }
 
 #side-card {
-    min-height: 500px;
-    height: calc(100vh - 40px);
-    width: 100%;
-    max-width: var(--side-card-max-width);
-    border-radius: 8px;
-    background: var(--bg-dark-gray500);
-    overflow: hidden;
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none; /* Standard syntax */
+  min-height: 500px;
+  height: calc(100vh - 40px);
+  width: 100%;
+  max-width: var(--side-card-max-width);
+  border-radius: 8px;
+  background: var(--bg-dark-gray500);
+  overflow: hidden;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
-@media screen and (max-width: 1000px){
-    #layout {
-        flex-direction: column;
-    }
-    #side-card {
-        margin-top: 20px;
-        height: 80vh;
-        max-width: none;
-    }
+@media screen and (max-width: 1000px) {
+  #layout {
+    flex-direction: column;
+  }
+  #side-card {
+    margin-top: 20px;
+    height: 80vh;
+    max-width: none;
+  }
 }
 
 @media screen and (orientation: portrait) {
-    #layout {
-        flex-direction: column;
-    }
+  #layout {
+    flex-direction: column;
+  }
 
-    #side-card {
-        margin-top: 20px;
-        height: 80vh;
-        max-width: none;
-    }
+  #side-card {
+    margin-top: 20px;
+    height: 80vh;
+    max-width: none;
+  }
 }

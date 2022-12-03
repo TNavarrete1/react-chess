@@ -1,65 +1,65 @@
 #moves-viewer {
-    position: relative;
-    color: var(--color-gray);
-    overflow: scroll;
+  position: relative;
+  color: var(--color-gray);
+  overflow: auto;
 }
 #moves-viewer header {
-    grid-area: header;
-    padding: 15px 0;
-    font-size: 14px;
-    text-align: center;
-    border-bottom: 2px solid var(--bg-dark-gray100);
+  grid-area: header;
+  padding: 15px 0;
+  font-size: 14px;
+  text-align: center;
+  border-bottom: 2px solid var(--bg-dark-gray100);
 }
 #move-list {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 .move-row {
-    display:grid;
-    grid-template-columns: 20px repeat(2, 1fr);
-    grid-auto-rows: 43px;
-    align-items: center;
-    padding: 0 15px;
+  display: grid;
+  grid-template-columns: 20px repeat(2, 1fr);
+  grid-auto-rows: 43px;
+  align-items: center;
+  padding: 0 15px;
 }
 .move {
-    display: flex;
-    padding-left: var(--left-offset);
-    gap: 15px;
-    z-index: 2;
+  display: flex;
+  padding-left: var(--left-offset);
+  gap: 15px;
+  z-index: 2;
 }
 .move-san {
-    padding-left: 10px;
-    padding-right: 20px;
-    padding-bottom: 3px;
-    border-radius: 2px;
+  margin-left: 5px;
+  padding-left: 10px;
+  padding-right: 20px;
+  padding-bottom: 3px;
+  border-radius: 2px;
 }
 .active-move-san {
-    background: var(--bg-transparent-white);
-    box-shadow: inset 0 -3px 0 0 var(--bg-transparent-gray500);
+  background: var(--bg-transparent-white);
+  box-shadow: inset 0 -3px 0 0 var(--bg-transparent-gray500);
 }
 .move-san-clickable {
-    cursor: pointer;
+  cursor: pointer;
 }
 .even-round {
-    background: var(--bg-dark-gray100);
+  background: var(--bg-dark-gray100);
 }
 .odd-round {
-    background: var(--bg-dark-gray500);
+  background: var(--bg-dark-gray500);
 }
 
 @media screen and ((max-width: 375px) or (max-height: 375px)) {
-    #moves-viewer header {
-        font-size: 12px;
-    }
-    #move-list {
-        grid-auto-rows: 38.5px;
-        
-    }
-    .move-row {
-        grid-template-columns: 16px repeat(2, 1fr);
-        font-size: 13px;
-    }
-    .move {
-        gap: 5px;
-    }
+  #moves-viewer header {
+    font-size: 12px;
+  }
+  #move-list {
+    grid-auto-rows: 38.5px;
+  }
+  .move-row {
+    grid-template-columns: 16px repeat(2, 1fr);
+    font-size: 13px;
+  }
+  .move {
+    gap: 5px;
+  }
 }
