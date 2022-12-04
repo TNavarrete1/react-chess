@@ -47,6 +47,7 @@ function App() {
     captured: null,
     color: "",
   });
+  const [resetToggle, setResetToggle] = useState(false);
 
   useEffect(() => {
     const resizeChessBoard = () => {
@@ -75,8 +76,8 @@ function App() {
       deactivatePieces();
       setGameState((prev) => {
         prev.gameOver = true;
-        prev.decisionTxt = "Game Over";
-        prev.winnerTxt = "Computer";
+        prev.decisionTxt = "Checkmate";
+        prev.winnerTxt = "Winner: computer";
         return { ...prev };
       });
     }
@@ -139,15 +140,13 @@ function App() {
         setGameState((prev) => {
           prev.gameOver = true;
           // Last move game ending move was made by your team
+          prev.decisionTxt = "by checkmate";
           if (prev.gameMode === "computer") {
-            prev.decisionTxt = "You Won!";
-            prev.winnerTxt = "player";
+            prev.winnerTxt = "Congrats, you won!";
           } else if (game.turn() === "b") {
-            prev.decisionTxt = "Game Over";
-            prev.winnerTxt = "player 1";
+            prev.winnerTxt = "player 1 Won!";
           } else {
-            prev.decisionTxt = "Game Over";
-            prev.winnerTxt = "player 2";
+            prev.winnerTxt = "player 2 Won!";
           }
           return { ...prev };
         });
@@ -300,8 +299,8 @@ function App() {
   const startGame = () => {
     let team, gameMode;
     setGameState((prev) => {
-      team = prev.team;
       gameMode = prev.gameMode;
+      team = prev.team;
       prev.gameStart = true;
       prev.canMovePieces = true;
       return { ...prev };
@@ -312,17 +311,33 @@ function App() {
     }
   };
 
-  const resetGame = (team = "white", gameMode = "") => {
+  const resetGame = (team = "white", gameMode = "", playingAgain = false) => {
     game.reset();
+    setResetToggle((prev) => {
+      return !prev;
+    });
     setBoardOrientation(team);
     setPosition({ board: game.board(), move: null });
     setMoveHistory(null);
     setPositionHistory([{ board: game.board(), move: null, pgn: game.pgn() }]);
-    setGameState({ gameStart: false, canMovePieces: false, team, gameMode });
+    setGameState({
+      gameStart: playingAgain ? true : false,
+      gameOver: false,
+      decisionTxt: "",
+      winnerTxt: "",
+      canMovePieces: playingAgain ? true : false,
+      team,
+      gameMode,
+    });
     setPreview({
       isPreviewing: false,
       movedAfterPreview: false,
       moveNum: null,
+    });
+    setLastMove({
+      validMove: false,
+      captured: null,
+      color: "",
     });
   };
 
@@ -339,61 +354,65 @@ function App() {
   };
 
   return (
-    <div id="layout" ref={layout}>
-      <ChessBoardWrapper
-        boardOrientation={boardOrientation}
-        gameStart={gameState.gameStart}
+    <>
+      <GameDecision
+        // Data
         gameOver={gameState.gameOver}
-        gameMode={gameState.gameMode}
+        decisionTxt={gameState.decisionTxt}
+        winnerTxt={gameState.winnerTxt}
         team={gameState.team}
-        lastMove={lastMove}
-        movedAfterPreview={preview.movedAfterPreview}
-        currMoveNum={preview.moveNum}
-        children={
-          <ChessBoard
-            ref={chessBoard}
-            children={
-              <GameDecision
-                gameOver={gameState.gameOver}
-                decisionTxt={gameState.decisionTxt}
-                winnerTxt={gameState.winnerTxt}
-              />
-            }
-            width={boardWidth}
-            boardOrientation={boardOrientation}
-            isBoardInactive={!gameState.gameStart}
-            position={position.board}
-            move={position.move}
-            canMovePieces={gameState.canMovePieces}
-            canMoveAfterPreview={true}
-            isPreviewing={preview.isPreviewing}
-            theme="tan"
-            onPieceDrop={handlePieceDrop}
-            onPieceDragBegin={handlePieceDragBegin}
-          />
-        }
+        gameMode={gameState.gameMode}
+        // Functions
+        resetGame={resetGame}
       />
-      <div id="side-card">
-        {gameState.gameStart ? (
-          <GameTracker
-            // Data
-            moveHistory={moveHistory}
-            moveNum={preview.moveNum}
-            // Functions
-            resetGame={resetGame}
-            handleBoardFlip={flipBoardOrientation}
-            previewPosition={previewPosition}
-          />
-        ) : (
-          <GameOptions
-            handleBoardOrientationOption={changeBoardOrientation}
-            handleGameMode={chooseGameMode}
-            handleStartGame={startGame}
-            showHeader={true}
-          />
-        )}
+      <div id="layout" ref={layout}>
+        <ChessBoardWrapper
+          resetToggle={resetToggle}
+          boardOrientation={boardOrientation}
+          gameMode={gameState.gameMode}
+          team={gameState.team}
+          lastMove={lastMove}
+          movedAfterPreview={preview.movedAfterPreview}
+          currMoveNum={preview.moveNum}
+          children={
+            <ChessBoard
+              ref={chessBoard}
+              width={boardWidth}
+              boardOrientation={boardOrientation}
+              isBoardInactive={!gameState.gameStart}
+              position={position.board}
+              move={position.move}
+              canMovePieces={gameState.canMovePieces}
+              canMoveAfterPreview={true}
+              isPreviewing={preview.isPreviewing}
+              theme="tan"
+              onPieceDrop={handlePieceDrop}
+              onPieceDragBegin={handlePieceDragBegin}
+            />
+          }
+        />
+        <div id="side-card">
+          {gameState.gameStart ? (
+            <GameTracker
+              // Data
+              moveHistory={moveHistory}
+              moveNum={preview.moveNum}
+              // Functions
+              resetGame={resetGame}
+              handleBoardFlip={flipBoardOrientation}
+              previewPosition={previewPosition}
+            />
+          ) : (
+            <GameOptions
+              handleBoardOrientationOption={changeBoardOrientation}
+              handleGameMode={chooseGameMode}
+              handleStartGame={startGame}
+              showHeader={true}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 export default App;

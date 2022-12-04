@@ -39,14 +39,19 @@ function GameController({
     previewPosition(moveHistory.length);
   };
 
-  const renderClickableIconWithInfo = (btnFunction, iconName, infoTxt) => {
+  const renderClickableIconWithInfo = (
+    btnFunction,
+    iconName,
+    infoTxt,
+    active = true
+  ) => {
     const iconContainer = (
       <div className="icon-btn-container hover-content-wrapper">
         <div className="hover-content">{infoTxt}</div>
         <div className="hover-content-carret"></div>
         <button
           className="controller-button"
-          onClick={moveHistory && moveHistory.length > 1 ? btnFunction : null}
+          onClick={active ? btnFunction : null}
         >
           <FontAwesomeIcon icon={iconName} />
         </button>
@@ -62,15 +67,27 @@ function GameController({
         {renderClickableIconWithInfo(
           movePreviewBeginning,
           faAnglesLeft,
-          "Start"
+          "Start",
+          moveHistory && moveHistory.length > 1
         )}
-        {renderClickableIconWithInfo(movePreviewBackOnce, faAngleLeft, "Back")}
+        {renderClickableIconWithInfo(
+          movePreviewBackOnce,
+          faAngleLeft,
+          "Back",
+          moveHistory && moveHistory.length > 1
+        )}
         {renderClickableIconWithInfo(
           movePreviewForwardOnce,
           faAngleRight,
-          "Forward"
+          "Forward",
+          moveHistory && moveHistory.length > 1
         )}
-        {renderClickableIconWithInfo(movePreviewEnd, faAnglesRight, "End")}
+        {renderClickableIconWithInfo(
+          movePreviewEnd,
+          faAnglesRight,
+          "End",
+          moveHistory && moveHistory.length > 1
+        )}
       </div>
       <div id="move-history-footer">
         <button id="settings-button">Settings</button>
