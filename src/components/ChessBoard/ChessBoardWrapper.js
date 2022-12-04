@@ -21,9 +21,8 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 
 export default function ChessBoardWrapper({
+  resetToggle,
   boardOrientation,
-  gameStart,
-  gameOver,
   gameMode,
   team,
   lastMove,
@@ -48,6 +47,79 @@ export default function ChessBoardWrapper({
   const [playersHistory, setPlayersHistory] = useState([]);
 
   // Helper functions
+  const updatePlayers = (team, gameMode, boardOrientation) => {
+    // Set player names
+    let topName, bottomName;
+    if (gameMode === "computer") {
+      if (team === "white") {
+        if (boardOrientation === "white") {
+          topName = "computer";
+          bottomName = "player";
+        } else {
+          topName = "player";
+          bottomName = "computer";
+        }
+      } else {
+        if (boardOrientation === "white") {
+          topName = "player";
+          bottomName = "computer";
+        } else {
+          topName = "computer";
+          bottomName = "player";
+        }
+      }
+    } else {
+      if (boardOrientation === "white") {
+        topName = "player 2";
+        bottomName = "player 1";
+      } else {
+        topName = "player 1";
+        bottomName = "player 2";
+      }
+    }
+
+    setPlayers((prev) => {
+      // Set names
+      prev.top.name = topName;
+      prev.bottom.name = bottomName;
+
+      // Switch player
+      let topTeam, bottomTeam;
+      if (boardOrientation === "white") {
+        topTeam = "black";
+        bottomTeam = "white";
+      } else {
+        topTeam = "white";
+        bottomTeam = "black";
+      }
+
+      // Switch captures and points
+      let topCaptures, bottomCaptures;
+      let topPoints, bottomPoints;
+      if (topTeam === prev.top.team) {
+        topCaptures = prev.top.captures;
+        topPoints = prev.top.capturePoints;
+        bottomCaptures = prev.bottom.captures;
+        bottomPoints = prev.bottom.capturePoints;
+      } else {
+        topCaptures = prev.bottom.captures;
+        topPoints = prev.bottom.capturePoints;
+        bottomCaptures = prev.top.captures;
+        bottomPoints = prev.top.capturePoints;
+      }
+
+      // Set teams
+      prev.top.team = topTeam;
+      prev.bottom.team = bottomTeam;
+      // Set captures and points
+      prev.top.captures = topCaptures;
+      prev.bottom.captures = bottomCaptures;
+      prev.top.capturePoints = topPoints;
+      prev.bottom.capturePoints = bottomPoints;
+
+      return { ...prev };
+    });
+  };
   const pieceNameToPoints = (pieceName) => {
     const pointsTable = {
       p: 1,
@@ -159,99 +231,22 @@ export default function ChessBoardWrapper({
 
   // Reset
   useEffect(() => {
-    if (!gameStart && !gameOver) {
-      setPlayers({
-        top: {
-          name: "player 1",
-          team: "white",
-          captures: { p: 0, b: 0, n: 0, r: 0, q: 0 },
-          capturePoints: 0,
-        },
-        bottom: {
-          name: "player 2",
-          team: "black",
-          captures: { p: 0, b: 0, n: 0, r: 0, q: 0 },
-          capturePoints: 0,
-        },
-      });
-    }
-  }, [gameStart, gameOver]);
-
-  // Switch top and bottom when necessary
-  useEffect(() => {
-    // Set player names
-    let topName, bottomName;
-    if (gameMode === "computer") {
-      if (team === "white") {
-        if (boardOrientation === "white") {
-          topName = "computer";
-          bottomName = "player";
-        } else {
-          topName = "player";
-          bottomName = "computer";
-        }
-      } else {
-        if (boardOrientation === "white") {
-          topName = "player";
-          bottomName = "computer";
-        } else {
-          topName = "computer";
-          bottomName = "player";
-        }
-      }
-    } else {
-      if (boardOrientation === "white") {
-        topName = "player 2";
-        bottomName = "player 1";
-      } else {
-        topName = "player 1";
-        bottomName = "player 2";
-      }
-    }
-
     setPlayers((prev) => {
-      // Set names
-      prev.top.name = topName;
-      prev.bottom.name = bottomName;
-
-      // Switch player
-      let topTeam, bottomTeam;
-      if (boardOrientation === "white") {
-        topTeam = "black";
-        bottomTeam = "white";
-      } else {
-        topTeam = "white";
-        bottomTeam = "black";
-      }
-
-      // Switch captures and points
-      let topCaptures, bottomCaptures;
-      let topPoints, bottomPoints;
-      if (topTeam === prev.top.team) {
-        topCaptures = prev.top.captures;
-        topPoints = prev.top.capturePoints;
-        bottomCaptures = prev.bottom.captures;
-        bottomPoints = prev.bottom.capturePoints;
-      } else {
-        topCaptures = prev.bottom.captures;
-        topPoints = prev.bottom.capturePoints;
-        bottomCaptures = prev.top.captures;
-        bottomPoints = prev.top.capturePoints;
-      }
-
-      // Set teams
-      prev.top.team = topTeam;
-      prev.bottom.team = bottomTeam;
-      // Set captures
-      prev.top.captures = topCaptures;
-      prev.bottom.captures = bottomCaptures;
-      // Set points
-      prev.top.capturePoints = topPoints;
-      prev.bottom.capturePoints = bottomPoints;
+      // Reset captures
+      prev.top.captures = { p: 0, b: 0, n: 0, r: 0, q: 0 };
+      prev.bottom.captures = { p: 0, b: 0, n: 0, r: 0, q: 0 };
+      // Reset capture points
+      prev.top.capturePoints = 0;
+      prev.bottom.capturePoints = 0;
 
       return { ...prev };
     });
-  }, [boardOrientation, gameMode, team]);
+  }, [resetToggle]);
+
+  // Switch top and bottom when necessary
+  useEffect(() => {
+    updatePlayers(team, gameMode, boardOrientation);
+  }, [team, gameMode, boardOrientation]);
 
   // Track captured pieces
   useEffect(() => {

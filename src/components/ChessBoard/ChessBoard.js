@@ -106,7 +106,6 @@ function ChessBoard(
 
   return (
     <div id="chess-board" className="bg-tan" ref={ref}>
-      {children}
       {
         /******************************************************
             Inactive Board Modal

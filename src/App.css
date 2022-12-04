@@ -5,6 +5,12 @@ html {
 #root {
   overflow: auto;
 }
+.lock-screen {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+  position: fixed;
+}
 
 #layout {
   --layout-min-width: 280px;

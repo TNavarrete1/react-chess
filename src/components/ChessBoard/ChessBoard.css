@@ -93,10 +93,3 @@
   transform: scale(2.25);
   z-index: 999;
 }
-
-.lock-screen {
-  height: 100%;
-  overflow: hidden;
-  width: 100%;
-  position: fixed;
-}

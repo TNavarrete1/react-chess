@@ -5,9 +5,18 @@ import useComponentVisible from "hooks/useComponentVisible";
 // Components
 import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRobot, faCrown, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
-export default function GameDecision({ gameOver, decisionTxt, winnerTxt }) {
+export default function GameDecision({
+  //Data
+  gameOver,
+  decisionTxt,
+  winnerTxt,
+  team,
+  gameMode,
+  // Functions
+  resetGame,
+}) {
   //Helper functions
 
   const { ref, isComponentVisible, setIsComponentVisible } =
@@ -23,6 +32,15 @@ export default function GameDecision({ gameOver, decisionTxt, winnerTxt }) {
     }
   }, [gameOver, setIsComponentVisible]);
 
+  // Removes body scroll when modal is active
+  useEffect(() => {
+    if (isComponentVisible) {
+      document.querySelector("body").classList.add("lock-screen");
+    } else {
+      document.querySelector("body").classList.remove("lock-screen");
+    }
+  }, [isComponentVisible]);
+
   return (
     <>
       {isComponentVisible && (
@@ -31,20 +49,38 @@ export default function GameDecision({ gameOver, decisionTxt, winnerTxt }) {
             <div id="exit-icon" onClick={removeDecisionCard}>
               <FontAwesomeIcon icon={faXmark} />
             </div>
-            <div id="header-bg-circle"></div>
-            <header>{decisionTxt}</header>
-            <div id="icon-winner-wrapper">
-              <div id="icon">
-                {winnerTxt === "Computer" ? (
-                  <FontAwesomeIcon
-                    icon={faRobot}
-                    style={{ color: "lightgray" }}
-                  />
-                ) : (
-                  <FontAwesomeIcon icon={faCrown} />
-                )}
-              </div>
-              <p id="winner">Winner: {winnerTxt}</p>
+            <header>Game Over!</header>
+            <p>
+              <span id="winner-txt">{winnerTxt}</span>
+              <span id="decision-txt">{decisionTxt}</span>
+            </p>
+            <div id="game-over-buttons">
+              <button
+                className="game-over-button"
+                style={{
+                  "--bg-color": "var(--bg-light-secondary)",
+                  "--bg-hover-color": "var(--bg-secondary)",
+                }}
+                onClick={() => {
+                  setIsComponentVisible(false);
+                  resetGame(team, gameMode, true);
+                }}
+              >
+                Play Again
+              </button>
+              <button
+                className="game-over-button"
+                style={{
+                  "--bg-color": "var(--bg-light-primary)",
+                  "--bg-hover-color": "var(--bg-primary)",
+                }}
+                onClick={() => {
+                  setIsComponentVisible(false);
+                  resetGame();
+                }}
+              >
+                New Game
+              </button>
             </div>
           </div>
         </div>
