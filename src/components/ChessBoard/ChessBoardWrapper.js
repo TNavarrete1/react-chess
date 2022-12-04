@@ -323,7 +323,7 @@ export default function ChessBoardWrapper({
 
   return (
     <div id="chess-board-wrapper">
-      <div className="player-card" style={{ padding: "0 5px 10px 5px" }}>
+      <div className="player-card">
         <div className="player-avatar">{renderAvatar(players.top)}</div>
         <header className="username">{players.top.name}</header>
         <div className="captured-pieces">
@@ -337,7 +337,7 @@ export default function ChessBoardWrapper({
         </div>
       </div>
       {children}
-      <div className="player-card" style={{ padding: "10px 5px 0 5px" }}>
+      <div className="player-card">
         <div className="player-avatar">{renderAvatar(players.bottom)}</div>
         <header className="username">{players.bottom.name}</header>
         <div className="captured-pieces">

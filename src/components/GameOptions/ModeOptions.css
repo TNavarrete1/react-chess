@@ -1,63 +1,64 @@
 #option-list {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    row-gap: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  row-gap: 15px;
 }
 #option-list header {
-    margin-bottom: 10px;
-    text-align: center;
-    font-size: 25px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 25px;
 }
 .option-button {
-    display: grid;
-    grid-template-areas: 
-        "icon h1"
-        "icon p";
-    grid-template-columns: min-content auto;
-    row-gap: 5px;
-    column-gap: 30px;
-    padding: 15px 30px;
-    text-align: start;
-    border-radius: 10px;
-    color: inherit;
-    background: var(--bg-dark-gray700);
-    cursor: pointer;
+  display: grid;
+  grid-template-areas:
+    "icon h1"
+    "icon p";
+  grid-template-columns: min-content auto;
+  row-gap: 5px;
+  column-gap: 30px;
+  padding: 15px 30px;
+  text-align: start;
+  border-radius: 10px;
+  color: inherit;
+  background: var(--bg-dark-gray500);
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
 }
 .option-button:hover {
-    background: var(--bg-dark-gray900);
+  background: var(--bg-dark-gray700);
 }
 .option-icon {
-    grid-area: icon;
-    justify-self: center;
-    align-self: center;
-    font-size: 40px;
-    color: var(--color);
+  grid-area: icon;
+  justify-self: center;
+  align-self: center;
+  font-size: 40px;
+  color: var(--color);
 }
 .option-button h1 {
-    grid-area: h1;
-    font-size: 30px;
+  grid-area: h1;
+  font-size: 30px;
 }
 .option-button p {
-    grid-area: p;
-    color: var(--color-gray);
+  grid-area: p;
+  color: var(--color-gray);
 }
 
 @media screen and ((max-width: 375px) or (max-height: 375px)) {
-    #option-list header {
-        font-size: 20px;
-    }
-    .option-button {
-        padding: 15px 20px;
-        column-gap: 20px;
-    }
-    .option-icon {
-        font-size: 33px;
-    }
-    .option-button h1 {
-        font-size: 24px;
-    }
-    .option-button p {
-        font-size: 13px;
-    }
+  #option-list header {
+    font-size: 20px;
+  }
+  .option-button {
+    padding: 15px 20px;
+    column-gap: 20px;
+  }
+  .option-icon {
+    font-size: 33px;
+  }
+  .option-button h1 {
+    font-size: 24px;
+  }
+  .option-button p {
+    font-size: 13px;
+  }
 }

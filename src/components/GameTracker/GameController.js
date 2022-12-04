@@ -50,7 +50,7 @@ function GameController({
         <div className="hover-content">{infoTxt}</div>
         <div className="hover-content-carret"></div>
         <button
-          className="controller-button"
+          className={`controller-button ${active ? "clickable" : ""}`}
           onClick={active ? btnFunction : null}
         >
           <FontAwesomeIcon icon={iconName} />

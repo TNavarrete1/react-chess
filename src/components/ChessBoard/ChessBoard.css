@@ -3,8 +3,8 @@
   min-width: var(--layout-min-width); /* From app */
   width: var(--chess-board-width); /* From chessboard wrapper */
   aspect-ratio: 1;
-  border-radius: 8px;
   background-size: cover;
+  border: 15px solid rgb(139, 91, 33);
 }
 
 #board-modal {
@@ -14,7 +14,6 @@
   position: absolute;
   height: 100%;
   width: 100%;
-  border-radius: 8px;
   background: rgba(0, 0, 0, 0.3);
   z-index: 999;
 }

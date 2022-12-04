@@ -90,17 +90,7 @@ function MoveHistory({ moveHistory, moveNum, previewPosition }) {
         </>
       );
     }
-    const moveSan = (
-      <span
-        className={`move-san${moveHistoryLen > 1 ? " move-san-clickable" : ""}${
-          moveNum === index + 1 ? " active-move-san" : ""
-        }`}
-        data-move={index + 1}
-        onClick={moveHistoryLen > 1 ? previewPastMove : null}
-      >
-        {pieceComponent}
-      </span>
-    );
+    const moveSan = <span className="move-san">{pieceComponent}</span>;
 
     return moveSan;
   };
@@ -118,15 +108,24 @@ function MoveHistory({ moveHistory, moveNum, previewPosition }) {
     // Moves components
     const moves = moveRows.map((move, index) => {
       return (
-        <div
-          key={JSON.stringify({ ...move, index })}
-          className={`move-row ${index % 2 === 0 ? "even-round" : "odd-round"}`}
-        >
-          <span>{index + 1}</span>
-          <span className="move">
+        <div key={JSON.stringify({ ...move, index })} className="move-row">
+          <span className="move-num">{index + 1}</span>
+          <span
+            className={`move ${
+              moveNum === index * 2 + 1 ? "active-move" : ""
+            } ${moveHistory.length > 1 ? " move-clickable" : ""}`}
+            data-move={index * 2 + 1}
+            onClick={moveHistory.length > 1 ? previewPastMove : null}
+          >
             {renderMoveSan(move[0], index * 2, moveHistory.length)}
           </span>
-          <span className="move">
+          <span
+            className={`move ${
+              moveNum === index * 2 + 2 ? "active-move" : ""
+            } ${moveHistory.length > 1 ? " move-clickable" : ""}`}
+            data-move={index * 2 + 2}
+            onClick={moveHistory.length > 1 ? previewPastMove : null}
+          >
             {move[1] &&
               renderMoveSan(move[1], index * 2 + 1, moveHistory.length)}
           </span>
