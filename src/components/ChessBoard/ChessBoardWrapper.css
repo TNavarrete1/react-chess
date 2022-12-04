@@ -14,6 +14,7 @@
   justify-self: center;
   align-self: flex-start;
   min-width: var(--layout-min-width);
+  box-shadow: 0px 0px 15px 4px rgba(0, 0, 0, 0.3);
 }
 
 @media screen and (max-width: 1000px) {
@@ -48,7 +49,9 @@
   grid-template-columns: min-content min-content auto;
   grid-template-rows: 20px 30px;
   column-gap: 20px;
+  padding: 5px;
   min-width: var(--layout-min-width);
+  background: var(--bg-dark-gray500);
 }
 .player-avatar {
   grid-area: avatar;

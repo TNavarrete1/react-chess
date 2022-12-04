@@ -58,8 +58,8 @@ export default function GameDecision({
               <button
                 className="game-over-button"
                 style={{
-                  "--bg-color": "var(--bg-light-secondary)",
-                  "--bg-hover-color": "var(--bg-secondary)",
+                  "--bg-color": "var(--bg-secondary)",
+                  "--bg-hover-color": "var(--bg-dark-secondary)",
                 }}
                 onClick={() => {
                   setIsComponentVisible(false);
@@ -71,8 +71,8 @@ export default function GameDecision({
               <button
                 className="game-over-button"
                 style={{
-                  "--bg-color": "var(--bg-light-primary)",
-                  "--bg-hover-color": "var(--bg-primary)",
+                  "--bg-color": "var(--bg-primary)",
+                  "--bg-hover-color": "var(--bg-dark-primary)",
                 }}
                 onClick={() => {
                   setIsComponentVisible(false);

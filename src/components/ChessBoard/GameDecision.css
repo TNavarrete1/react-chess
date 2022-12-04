@@ -31,9 +31,9 @@
   width: 100%;
   font-size: 35px;
   font-weight: 700;
-  text-shadow: 0px 4px 1px var(--color-light-primary);
+  text-shadow: 0px 4px 1px var(--color-dark-primary);
   color: var(--color-white);
-  background: var(--bg-secondary);
+  background: var(--bg-dark-secondary);
   box-shadow: 0px 1px 14px 5px rgba(0, 0, 0, 0.5);
 }
 .modal-card p {

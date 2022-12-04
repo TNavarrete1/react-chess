@@ -1,124 +1,126 @@
 #prompt-modal {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: 999;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 999;
 }
 
 #game-tracker-headers {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    position: relative;
-    color: var(--color-white);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  position: relative;
+  color: var(--color-white);
 }
 .header-tabs {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding: 15px 0;
-    font-size: 15px;
-    color: var(--color-gray);
-    background: var(--bg-dark-gray700);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 0;
+  font-size: 15px;
+  color: var(--color-gray);
+  background: var(--bg-dark-gray300);
 }
 .header-tabs:hover {
-    color:var(--hover-gray);
+  color: var(--hover-gray);
 }
 #playing-tab {
-    color: inherit;
-    background: var(--bg-dark-gray500);
+  color: inherit;
+  background: var(--bg-dark-gray500);
 }
 #playing-tab:hover {
-    color:inherit;
+  color: inherit;
 }
 #new-game-tab {
-    width: 100%;
-    cursor: pointer;
+  width: 100%;
+  cursor: pointer;
 }
 
 .header-tabs svg {
-    font-size: 25px;
+  font-size: 25px;
 }
 
 #prompt {
-    display: grid;
-    grid-template-areas: 
-        "header header"
-        "cancel yes";
-    grid-template-columns: repeat(2, 1fr);
-    position: absolute;
-    column-gap: 5px;
-    row-gap: 10px;
-    top: calc(100% + 10px);
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    padding: 15px;
-    width: 100%;
-    max-width: 200px;
-    border-radius: 3px;
-    background: var(--bg-white);
-    z-index: 999;
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "cancel yes";
+  grid-template-columns: repeat(2, 1fr);
+  position: absolute;
+  column-gap: 5px;
+  row-gap: 10px;
+  top: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  padding: 15px;
+  width: 100%;
+  max-width: 200px;
+  border-radius: 3px;
+  background: var(--bg-white);
+  z-index: 999;
 }
 #prompt::after {
-    --width: 20px;
-    content: "";
-    position: absolute;
-    top: calc(var(--width) / 2 * -1);
-    left: calc(50% - var(--width) / 2);
-    width: var(--width);
-    aspect-ratio: 1;
-    background: var(--bg-white);
-    transform: rotate(45deg);
+  --width: 20px;
+  content: "";
+  position: absolute;
+  top: calc(var(--width) / 2 * -1);
+  left: calc(50% - var(--width) / 2);
+  width: var(--width);
+  aspect-ratio: 1;
+  background: var(--bg-white);
+  transform: rotate(45deg);
 }
 #prompt header {
-    grid-area: header;
-    text-align: center;
-    font-size: 15px;
-    color: var(--bg-dark-gray900);
+  grid-area: header;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-black);
 }
 .prompt-buttons {
-    padding: 10px 15px;
-    font-weight: 600;
-    font-size: 14px;
-    border-radius: 3px;
-    cursor: pointer;
+  padding: 10px 15px;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
 }
 #cancel-button {
-    grid-area: cancel;
-    color: var(--color-gray900);
-    background: var(--bg-gray);
+  grid-area: cancel;
+  color: var(--color-gray900);
+  background: var(--bg-gray);
 }
 #cancel-button:hover {
-    background: var(--bg-light-gray);
+  background: var(--bg-light-gray);
 }
 #yes-button {
-    grid-area: yes;
-    color: var(color-dark-gray900);
-    background: var(--bg-dark-yellow);
+  grid-area: yes;
+  color: var(--color-white);
+  background: var(--bg-primary);
 }
 #yes-button:hover {
-    background: var(--bg-yellow);
+  background: var(--bg-dark-primary);
 }
 
-@media screen and ((max-width: 375px) or (max-height: 375px)){
-    .header-tabs {
-        font-size: 13px;
-    }
-    .header-tabs svg {
-        font-size: 20px;
-    }
-    #prompt {
-        padding: 15px 10px;
-    }
-    #prompt header {
-        font-size: 13px;
-    }
-    .prompt-buttons {
-        padding: 8px 12px;
-        font-size: 12px;
-    }
+@media screen and ((max-width: 375px) or (max-height: 375px)) {
+  .header-tabs {
+    font-size: 13px;
+  }
+  .header-tabs svg {
+    font-size: 20px;
+  }
+  #prompt {
+    padding: 15px 10px;
+  }
+  #prompt header {
+    font-size: 13px;
+  }
+  .prompt-buttons {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
 }

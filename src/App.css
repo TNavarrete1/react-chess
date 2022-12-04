@@ -1,6 +1,10 @@
 body,
 html {
-  background: var(--bg-dark-gray300);
+  background: linear-gradient(
+    to right bottom,
+    var(--bg-light-secondary),
+    var(--bg-secondary)
+  );
 }
 #root {
   overflow: auto;
@@ -38,8 +42,8 @@ html {
   height: calc(100vh - 40px);
   width: 100%;
   max-width: var(--side-card-max-width);
-  border-radius: 8px;
-  background: var(--bg-dark-gray500);
+  background: var(--bg-dark-secondary);
+  box-shadow: 0px 0px 15px 4px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
@@ -67,4 +71,7 @@ html {
     height: 80vh;
     max-width: none;
   }
+}
+.clickable {
+  cursor: pointer;
 }
