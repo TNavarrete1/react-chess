@@ -16,6 +16,7 @@ function GameController({
   moveNum,
   handleBoardFlip,
   previewPosition,
+  endGame,
 }) {
   const movePreviewBackOnce = () => {
     if (moveNum - 1 === -1) {
@@ -93,7 +94,7 @@ function GameController({
         <button id="settings-button">Settings</button>
         <div className="footer-icons">
           {renderClickableIconWithInfo(handleBoardFlip, faRotate, "Flip Board")}
-          {renderClickableIconWithInfo(null, faFlagCheckered, "Resign")}
+          {renderClickableIconWithInfo(endGame, faFlagCheckered, "Resign")}
         </div>
       </div>
     </div>

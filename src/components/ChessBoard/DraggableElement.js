@@ -37,14 +37,14 @@ function DraggableElement({
 
     // Get parent offsets
     while (el.offsetParent) {
-      offsets.left += el.offsetLeft;
-      offsets.top += el.offsetTop;
+      // Empty space
+      offsets.left += parseInt(el.offsetLeft);
+      offsets.top += parseInt(el.offsetTop);
       el = el.offsetParent;
     }
-
-    // Get border widths if any
-    offsets.left += borderSize * 2;
-    offsets.top += borderSize * 2;
+    // Get chess border widths if any
+    offsets.left += borderSize;
+    offsets.top += borderSize;
 
     return offsets;
   };
@@ -121,6 +121,11 @@ function DraggableElement({
           chessBoard.current.clientWidth) *
           100 -
         halfOfPieceSizePercent;
+
+      // Snap piece lower on phones
+      if (e.type === "touchmove") {
+        posY -= 6.25;
+      }
 
       // Keep location in bounds of chessboard
       const maxPosX = 93.5;
@@ -232,44 +237,31 @@ function DraggableElement({
       window.addEventListener("mouseup", onDragDrop);
       window.addEventListener("touchend", onDragDrop, { passive: false });
 
-      // Get square being hovered over and active hover and possible moves effect
-      const singlesquareSizePx = chessBoard.current.clientWidth / 8;
-      const singlesquareSizePercent = 12.5;
-      const chessBoardOffsets = getElOffsets(chessBoard.current);
-      const squarePosX =
-        Math.floor(
-          ((e.clientX || touchObject.current.pageX) - chessBoardOffsets.left) /
-            singlesquareSizePx
-        ) * singlesquareSizePercent;
-      const squarePosY =
-        Math.floor(
-          ((e.clientY || touchObject.current.pageY) - chessBoardOffsets.top) /
-            singlesquareSizePx
-        ) * singlesquareSizePercent;
-      const sourceSquare = getBoardSquare(
-        boardOrientation,
-        squarePosX,
-        squarePosY
-      );
       if (e.type === "touchstart") {
-        onSquareHover(sourceSquare, true); // Activate square highlight and circular indicator for touch event
+        onSquareHover(currSquare, true); // Activate square highlight and circular indicator for touch event
       } else {
-        onSquareHover(sourceSquare); // Activate square highlight
+        onSquareHover(currSquare); // Activate square highlight
       }
-      activateSelectedPieceEffects(sourceSquare, { pieceName, pieceColor }); // Activate possible moves effect
+      activateSelectedPieceEffects(currSquare, { pieceName, pieceColor }); // Activate possible moves effect
 
       // Snap piece position to Mouse
+      const chessBoardOffsets = getElOffsets(chessBoard.current);
       const halfOfPieceSize = 6.25;
       const posX =
         (((e.clientX || touchObject.current.pageX) - chessBoardOffsets.left) /
           chessBoard.current.clientWidth) *
           100 -
         halfOfPieceSize;
-      const posY =
+      let posY =
         (((e.clientY || touchObject.current.pageY) - chessBoardOffsets.top) /
           chessBoard.current.clientWidth) *
           100 -
         halfOfPieceSize;
+
+      // Snap piece lower on phones
+      if (e.type === "touchstart") {
+        posY -= 6.25;
+      }
 
       // Update dragging sate
       setdraggingState((prev) => {
@@ -285,7 +277,7 @@ function DraggableElement({
     },
     [
       activateSelectedPieceEffects,
-      boardOrientation,
+      currSquare,
       canMovePieces,
       chessBoard,
       onDrag,

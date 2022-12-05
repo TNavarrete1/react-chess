@@ -311,6 +311,15 @@ function App() {
     }
   };
 
+  const endGame = () => {
+    setGameState((prev) => {
+      prev.gameOver = true;
+      prev.canMovePieces = false;
+
+      return { ...prev };
+    });
+  };
+
   const resetGame = (team = "white", gameMode = "", playingAgain = false) => {
     game.reset();
     setResetToggle((prev) => {
@@ -379,7 +388,7 @@ function App() {
               ref={chessBoard}
               width={boardWidth}
               boardOrientation={boardOrientation}
-              isBoardInactive={!gameState.gameStart}
+              isBoardInactive={false}
               position={position.board}
               move={position.move}
               canMovePieces={gameState.canMovePieces}
@@ -401,6 +410,7 @@ function App() {
               resetGame={resetGame}
               handleBoardFlip={flipBoardOrientation}
               previewPosition={previewPosition}
+              endGame={endGame}
             />
           ) : (
             <GameOptions
