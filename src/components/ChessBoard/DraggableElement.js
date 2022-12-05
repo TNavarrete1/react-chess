@@ -31,11 +31,20 @@ function DraggableElement({
   // Helper functions
   const getElOffsets = (el) => {
     const offsets = { left: 0, top: 0 };
+    const borderSize = parseInt(
+      getComputedStyle(el).getPropertyValue("border-width").slice(0, -2)
+    );
+
+    // Get parent offsets
     while (el.offsetParent) {
       offsets.left += el.offsetLeft;
       offsets.top += el.offsetTop;
       el = el.offsetParent;
     }
+
+    // Get border widths if any
+    offsets.left += borderSize * 2;
+    offsets.top += borderSize * 2;
 
     return offsets;
   };
