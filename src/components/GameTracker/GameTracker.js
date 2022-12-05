@@ -11,6 +11,7 @@ export default function GameTracker({
   resetGame,
   handleBoardFlip,
   previewPosition,
+  endGame,
 }) {
   return (
     <div id="move-history-wrapper">
@@ -23,8 +24,10 @@ export default function GameTracker({
       <GameController
         moveHistory={moveHistory}
         moveNum={moveNum}
+        // Functions
         handleBoardFlip={handleBoardFlip}
         previewPosition={previewPosition}
+        endGame={endGame}
       />
     </div>
   );
