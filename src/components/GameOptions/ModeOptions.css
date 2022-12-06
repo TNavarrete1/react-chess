@@ -3,11 +3,13 @@
   flex-direction: column;
   justify-content: flex-start;
   row-gap: 15px;
+  padding: 15px var(--padding-right) 40px var(--padding-left);
 }
 #option-list header {
   margin-bottom: 10px;
   text-align: center;
-  font-size: 25px;
+  font-size: 23px;
+  font-weight: 500;
 }
 .option-button {
   display: grid;
@@ -26,6 +28,7 @@
   transition: all 0.15s ease-in-out;
 }
 .option-button:hover {
+  transform: translateY(-4px);
   background: var(--bg-dark-gray700);
 }
 .option-icon {

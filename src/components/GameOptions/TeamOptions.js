@@ -35,7 +35,7 @@ function TeamOptions({ handleBoardOrientationOption, handleStartGame }) {
         <FontAwesomeIcon
           icon={faChessKing}
           style={{
-            "--color": "var(--bg-dark-gray700)",
+            "--color": "var(--bg-dark-gray500)",
             "--bg": "var(--bg-white)",
           }}
         />
@@ -55,7 +55,7 @@ function TeamOptions({ handleBoardOrientationOption, handleStartGame }) {
           style={{
             "--color": "var(--bg-gray500)",
             "--bg":
-              "linear-gradient(to right, var(--bg-white) 50%, var(--bg-dark-gray700) 50%",
+              "linear-gradient(to right, var(--bg-white) 50%, var(--bg-dark-gray500) 50%",
           }}
         />
       </button>
@@ -73,7 +73,7 @@ function TeamOptions({ handleBoardOrientationOption, handleStartGame }) {
           icon={faChessKing}
           style={{
             "--color": "var(--bg-white)",
-            "--bg": "var(--bg-dark-gray700)",
+            "--bg": "var(--bg-dark-gray500)",
           }}
         />
       </button>

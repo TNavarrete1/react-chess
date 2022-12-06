@@ -75,11 +75,11 @@ function MoveHistory({ moveHistory, moveNum, previewPosition }) {
   };
 
   // Helper functions
-  const renderMoveSan = (move, index, moveHistoryLen) => {
+  const renderMove = (move, index) => {
     const pieceIconIndex = getPieceNameIndexInSan(move);
-    let pieceComponent = move.san;
+    let moveSanContent = move.san;
     if (pieceIconIndex !== -1) {
-      pieceComponent = (
+      moveSanContent = (
         <>
           {move.san.substr(0, pieceIconIndex)}
           <FontAwesomeIcon
@@ -90,9 +90,19 @@ function MoveHistory({ moveHistory, moveNum, previewPosition }) {
         </>
       );
     }
-    const moveSan = <span className="move-san">{pieceComponent}</span>;
+    const moveComponent = (
+      <span
+        className={`move ${moveNum === index + 1 ? "active-move" : ""} ${
+          moveHistory.length > 1 ? " move-clickable" : ""
+        }`}
+        data-move={index + 1}
+        onClick={moveHistory.length > 1 ? previewPastMove : null}
+      >
+        <span className="move-san">{moveSanContent}</span>
+      </span>
+    );
 
-    return moveSan;
+    return moveComponent;
   };
 
   const renderMoves = (moveHistory) => {
@@ -110,25 +120,8 @@ function MoveHistory({ moveHistory, moveNum, previewPosition }) {
       return (
         <div key={JSON.stringify({ ...move, index })} className="move-row">
           <span className="move-num">{index + 1}</span>
-          <span
-            className={`move ${
-              moveNum === index * 2 + 1 ? "active-move" : ""
-            } ${moveHistory.length > 1 ? " move-clickable" : ""}`}
-            data-move={index * 2 + 1}
-            onClick={moveHistory.length > 1 ? previewPastMove : null}
-          >
-            {renderMoveSan(move[0], index * 2, moveHistory.length)}
-          </span>
-          <span
-            className={`move ${
-              moveNum === index * 2 + 2 ? "active-move" : ""
-            } ${moveHistory.length > 1 ? " move-clickable" : ""}`}
-            data-move={index * 2 + 2}
-            onClick={moveHistory.length > 1 ? previewPastMove : null}
-          >
-            {move[1] &&
-              renderMoveSan(move[1], index * 2 + 1, moveHistory.length)}
-          </span>
+          {renderMove(move[0], index * 2)}
+          {move[1] && renderMove(move[1], index * 2 + 1)}
         </div>
       );
     });

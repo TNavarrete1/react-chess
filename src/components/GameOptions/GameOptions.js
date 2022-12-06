@@ -22,10 +22,10 @@ function GameOptions({
   return (
     <div id="game-options">
       {showHeader && (
-        <>
+        <div id="game-options-top">
           <header>Play Chess</header>
           <FontAwesomeIcon icon={faChess} id="chess-icon" />
-        </>
+        </div>
       )}
       {gameModeChosen ? (
         <TeamOptions
