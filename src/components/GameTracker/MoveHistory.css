@@ -41,7 +41,13 @@
   background: var(--bg-dark-gray300);
   border-radius: 4px;
 }
+.move:hover {
+  background: var(--bg-gray900);
+}
 .active-move {
+  background: var(--bg-primary);
+}
+.active-move:hover {
   background: var(--bg-primary);
 }
 .move-san {

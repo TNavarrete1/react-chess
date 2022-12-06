@@ -10,7 +10,6 @@ import MovementAfterEffect from "components/ChessBoard/MovementAfterEffect";
 
 function ChessBoard(
   {
-    children,
     width,
     boardOrientation,
     isBoardInactive,
@@ -35,16 +34,6 @@ function ChessBoard(
     square: "",
     activatedOnce: false,
   });
-
-  // useEffect hooks
-  useEffect(() => {
-    setHoverSquareEffects({ square: "", touchDrag: false });
-    setSelectedPieceEffects({
-      possibleMoves: null,
-      square: "",
-      activatedOnce: false,
-    });
-  }, [isPreviewing, isBoardInactive]); // Resets ChessBoard
 
   // Renders hover square
   const handleSquareHover = useCallback((square, touchDrag = false) => {
@@ -103,6 +92,32 @@ function ChessBoard(
       return { ...prev };
     });
   }, []);
+
+  // useEffect hooks
+  useEffect(() => {
+    const boardRef = ref.current;
+    const handleTouchStart = (e) => {
+      e.preventDefault();
+    };
+    if (boardRef) {
+      boardRef.addEventListener("touchstart", handleTouchStart);
+    }
+
+    return () => {
+      if (boardRef) {
+        boardRef.removeEventListener("touchstart", handleTouchStart);
+      }
+    };
+  }, [ref]); // Disables touch events on chess board
+
+  useEffect(() => {
+    setHoverSquareEffects({ square: "", touchDrag: false });
+    setSelectedPieceEffects({
+      possibleMoves: null,
+      square: "",
+      activatedOnce: false,
+    });
+  }, [isPreviewing, isBoardInactive]); // Resets chess board
 
   return (
     <div id="chess-board" className="bg-tan" ref={ref}>

@@ -1,79 +1,82 @@
 #board-orientation-list {
-    display: grid;
-    grid-template-areas: 
-        "header header header"
-        "white-board-orientation random-board-orientation black-board-orientation"
-        "play-button play-button play-button";
-        grid-template-rows: repeat(2, min-content) auto;
-    row-gap: 25px;
-    column-gap: 20px;
-    height: 100%;
-    text-align: center;
+  display: grid;
+  grid-template-areas:
+    "header header header"
+    "white-board-orientation random-board-orientation black-board-orientation"
+    "play-button play-button play-button";
+  grid-template-rows: repeat(2, min-content) auto;
+  row-gap: 25px;
+  column-gap: 20px;
+  height: 100%;
+  text-align: center;
+  padding: 15px var(--padding-right) 40px var(--padding-left);
 }
 #board-orientation-list header {
-    grid-area: header;
-    font-size: 25px;
+  grid-area: header;
+  font-size: 23px;
+  font-weight: 500;
 }
 
 #white-board-orientation-icon {
-    grid-area: white-board-orientation;
+  grid-area: white-board-orientation;
 }
 #random-board-orientation-icon {
-    grid-area: random-board-orientation;
+  grid-area: random-board-orientation;
 }
 #black-board-orientation-icon {
-    grid-area: black-board-orientation;
+  grid-area: black-board-orientation;
 }
 .board-orientation-button {
-    background: transparent;
-    cursor: pointer;
+  background: transparent;
+  cursor: pointer;
 }
 .board-orientation-button svg {
-    margin: 5px;
-    padding: 15px;
-    font-size: 45px;
-    border-radius: 5px;
-    color: var(--color);
-    background: var(--bg);
+  margin: 6px;
+  padding: 15px;
+  font-size: 45px;
+  border-radius: 5px;
+  color: var(--color);
+  background: var(--bg);
 }
 .board-orientation-button-highlight {
-    box-shadow: inset 0 0 0 2px var(--bg-dark-yellow);
-    border-radius: 8px;
+  box-shadow: inset 0 0 0 3px var(--bg-primary);
+  border-radius: 10px;
 }
 
 #start-game-button {
-    grid-area: play-button;
-    align-self: flex-end;
-    padding: 20px 35px;
-    height: min-content;
-    width: 100%;
-    font-size: 25px;
-    font-weight: 900;
-    border-radius: 10px;
-    color: var(--color-dark-gray900);
-    background: var(--bg-dark-yellow);
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
+  grid-area: play-button;
+  align-self: flex-end;
+  padding: 20px 35px;
+  height: min-content;
+  width: 100%;
+  font-size: 25px;
+  font-weight: 900;
+  border-radius: 10px;
+  color: var(--color-white);
+  background: var(--bg-primary);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
 }
 #start-game-button:hover {
-    transform: scale(1.025);
-    box-shadow: 1px 1px 15px 1px var(--hover-yellow);
+  background: var(--bg-dark-primary);
+  transform: scale(1.025);
 }
 
 @media screen and ((max-width: 375px) or (max-height: 375px)) {
- #board-orientation-list {
+  #board-orientation-list {
     column-gap: 15px;
- }
- #board-orientation-list header {
+    padding: 15px 15px 40px 15px;
+  }
+  #board-orientation-list header {
     font-size: 20px;
- }
- .board-orientation-button svg {
+  }
+  .board-orientation-button svg {
     font-size: 35px;
     border-radius: 3px;
- }
+  }
 
- #start-game-button {
+  #start-game-button {
     padding: 20px 28px;
     font-size: 20px;
- }
+  }
 }

@@ -40,6 +40,7 @@
   --bg-black: #141414;
   --bg-gray: #dadada;
   --bg-gray500: #ababab;
+  --bg-gray900: #4f4f4f;
   --bg-white: #fff8f8;
   --bg-blue: #6767f0;
   --bg-red: #ed6262;
@@ -68,6 +69,7 @@
   --hover-secondary: #00296b;
   --hover-yellow: rgba(255, 247, 0, 0.425);
   --hover-gray: #ececec;
+  --hover-light-primary: #89d447;
   --hover-dark-gray100: #3f3f3f;
   --hover-dark-gray300: #2f2f2f;
 

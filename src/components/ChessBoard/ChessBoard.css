@@ -1,12 +1,12 @@
 #chess-board {
-  --border-size: 15px;
+  --border-size: 20px;
   position: relative;
   min-width: var(--layout-min-width); /* From app */
   width: var(--chess-board-width); /* From chessboard wrapper */
   min-height: var(--layout-min-width);
   height: var(--chess-board-width);
   background-size: cover;
-  border: var(--border-size) solid rgb(139, 91, 33);
+  border: var(--border-size) solid rgb(174, 114, 41);
 }
 
 #board-modal {

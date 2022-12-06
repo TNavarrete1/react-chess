@@ -1,29 +1,43 @@
 #game-options {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 15px 30px 40px 30px;
-    height: 100%;
-    color: var(--color-white);
+  --padding-left: 30px;
+  --padding-right: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  color: var(--color-white);
 }
-#game-options header {
-    font-size: 40px;
+#game-options-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  padding: 15px var(--padding-right) 30px var(--padding-left);
+  width: 100%;
+  background: var(--bg-dark-gray500);
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid var(--bg-dark-gray700);
+}
+#game-options-top header {
+  height: min-content;
+  font-size: 40px;
+  font-weight: 600;
 }
 #chess-icon {
-    margin-top: 10px;
-    margin-bottom: 35px;
-    font-size: 60px;
-    color: var(--bg-dark-yellow);
+  font-size: 60px;
+  color: var(--bg-light-primary);
 }
 
 @media screen and ((max-width: 375px) or (max-height: 375px)) {
-    #game-options {
-        padding: 15px 15px 40px 15px;
-    }
-    #game-options header {
-        font-size: 33px;
-    }
-    #chess-icon {
-        font-size: 53px;
-    }
+  #game-options {
+    --padding-left: 15px;
+    --padding-right: 15px;
+  }
+  #game-options-top header {
+    font-size: 33px;
+  }
+  #chess-icon {
+    font-size: 53px;
+  }
 }
