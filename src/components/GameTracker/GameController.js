@@ -40,6 +40,10 @@ function GameController({
     previewPosition(moveHistory.length);
   };
 
+  const resign = () => {
+    endGame(true);
+  };
+
   const renderClickableIconWithInfo = (
     btnFunction,
     iconName,
@@ -94,7 +98,7 @@ function GameController({
         <button id="settings-button">Settings</button>
         <div className="footer-icons">
           {renderClickableIconWithInfo(handleBoardFlip, faRotate, "Flip Board")}
-          {renderClickableIconWithInfo(endGame, faFlagCheckered, "Resign")}
+          {renderClickableIconWithInfo(resign, faFlagCheckered, "Resign")}
         </div>
       </div>
     </div>

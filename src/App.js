@@ -49,19 +49,6 @@ function App() {
   });
   const [resetToggle, setResetToggle] = useState(false);
 
-  useEffect(() => {
-    const resizeChessBoard = () => {
-      setBoardWidth(chessBoard.current.clientWidth);
-    };
-
-    window.addEventListener("resize", resizeChessBoard);
-    resizeChessBoard();
-
-    return () => {
-      window.removeEventListener("resize", resizeChessBoard);
-    };
-  }, []);
-
   const makeRandomMove = useCallback(() => {
     const possibleMoves = game.moves();
     // No moves possible
@@ -76,20 +63,30 @@ function App() {
       deactivatePieces();
       setGameState((prev) => {
         prev.gameOver = true;
-        prev.decisionTxt = "Checkmate";
-        prev.winnerTxt = "Winner: computer";
+        prev.winnerTxt = "Computer has won";
+        if (game.isCheckmate()) {
+          prev.decisionTxt = "by checkmate";
+        } else if (game.isDraw()) {
+          prev.winnerTxt = "Draw!";
+          if (game.isStalemate()) {
+            prev.decisionTxt = "by stalemate";
+          } else if (game.isInsufficientMaterial()) {
+            prev.decisionTxt = "by insufficient material";
+          } else if (game.isThreefoldRepetition()) {
+            prev.decisionTxt = "by threefold repetition";
+          }
+        }
         return { ...prev };
       });
     }
 
     setLastMove((prev) => {
       prev.validMove = true;
+      prev.color = move.color;
       if (move.captured) {
         prev.captured = move.captured;
-        prev.color = move.color;
       } else {
         prev.captured = null;
-        prev.color = "";
       }
       return { ...prev };
     });
@@ -140,13 +137,25 @@ function App() {
         setGameState((prev) => {
           prev.gameOver = true;
           // Last move game ending move was made by your team
-          prev.decisionTxt = "by checkmate";
           if (prev.gameMode === "computer") {
             prev.winnerTxt = "Congrats, you won!";
           } else if (game.turn() === "b") {
-            prev.winnerTxt = "player 1 Won!";
+            prev.winnerTxt = "player 1 has Won!";
           } else {
-            prev.winnerTxt = "player 2 Won!";
+            prev.winnerTxt = "player 2 has Won!";
+          }
+
+          if (game.isCheckmate()) {
+            prev.decisionTxt = "by checkmate";
+          } else if (game.isDraw()) {
+            prev.winnerTxt = "Draw!";
+            if (game.isStalemate()) {
+              prev.decisionTxt = "by stalemate";
+            } else if (game.isInsufficientMaterial()) {
+              prev.decisionTxt = "by insufficient material";
+            } else if (game.isThreefoldRepetition()) {
+              prev.decisionTxt = "by threefold repetition";
+            }
           }
           return { ...prev };
         });
@@ -181,12 +190,11 @@ function App() {
       if (targetSquare !== sourceSquare) {
         setLastMove((prev) => {
           prev.validMove = true;
+          prev.color = move.color;
           if (move.captured) {
             prev.captured = move.captured;
-            prev.color = move.color;
           } else {
             prev.captured = null;
-            prev.color = "";
           }
           return { ...prev };
         });
@@ -311,11 +319,33 @@ function App() {
     }
   };
 
-  const endGame = () => {
+  useEffect(() => {
+    const resizeChessBoard = () => {
+      setBoardWidth(chessBoard.current.clientWidth);
+    };
+
+    window.addEventListener("resize", resizeChessBoard);
+    resizeChessBoard();
+
+    return () => {
+      window.removeEventListener("resize", resizeChessBoard);
+    };
+  }, []);
+
+  const endGame = (resign = false) => {
     setGameState((prev) => {
       prev.gameOver = true;
       prev.canMovePieces = false;
-
+      if (resign) {
+        prev.decisionTxt = "by Resignation";
+        if (gameState.gameMode === "computer") {
+          prev.winnerTxt = "Computer has won";
+        } else if (lastMove.color === "w") {
+          prev.winnerTxt = "Player 1 has won!";
+        } else {
+          prev.winnerTxt = "Player 2 has won!";
+        }
+      }
       return { ...prev };
     });
   };
