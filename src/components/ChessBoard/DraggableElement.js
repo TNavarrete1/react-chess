@@ -124,7 +124,7 @@ function DraggableElement({
 
       // Snap piece lower on phones
       if (e.type === "touchmove") {
-        posY -= 6.25;
+        posY -= 8;
       }
 
       // Keep location in bounds of chessboard
@@ -260,7 +260,7 @@ function DraggableElement({
 
       // Snap piece lower on phones
       if (e.type === "touchstart") {
-        posY -= 6.25;
+        posY -= 8;
       }
 
       // Update dragging sate
