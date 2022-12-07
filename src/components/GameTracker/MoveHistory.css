@@ -22,6 +22,7 @@
   align-items: center;
   gap: 3px;
   margin: 1.5px 4px;
+  font-size: 16px;
 }
 .move-num {
   display: flex;
@@ -66,10 +67,10 @@
     font-size: 12px;
   }
   #move-list {
-    grid-auto-rows: 38.5px;
+    grid-auto-rows: 38px;
   }
   .move-row {
-    grid-template-columns: 16px repeat(2, 1fr);
+    grid-template-columns: 35px repeat(2, 1fr);
     font-size: 13px;
   }
   .move {

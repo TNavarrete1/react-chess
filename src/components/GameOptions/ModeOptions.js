@@ -22,7 +22,7 @@ function ModeOptions({ handleGameMode, chooseGameMode }) {
         <FontAwesomeIcon
           icon={faHouseSignal}
           className="option-icon"
-          style={{ "--color": "var(--bg-green)" }}
+          style={{ "--color": "var(--bg-dark-yellow)" }}
         />
         <h1>Play Local</h1>
         <p>Play against yourself or someone on the same device</p>

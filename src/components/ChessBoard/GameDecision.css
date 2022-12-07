@@ -1,21 +1,23 @@
 #game-decision-modal {
   display: flex;
-  justify-content: center;
-  align-items: center;
   position: absolute;
   top: 0;
+  left: 0;
   height: 100vh;
   width: 100vw;
   font-family: var(--font-primary);
   background: var(--bg-transparent-black);
   z-index: 999;
+  overflow: auto;
 }
 .modal-card {
   display: grid;
   grid-template-rows: 145px min-content auto;
   grid-template-columns: auto;
   position: relative;
+  margin: auto;
   height: min-content;
+  min-width: 300px;
   width: 100%;
   max-width: 400px;
   background: var(--bg-white);
@@ -27,6 +29,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
   height: 100%;
   width: 100%;
   font-size: 35px;
