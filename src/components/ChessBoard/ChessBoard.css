@@ -91,6 +91,6 @@
 }
 
 .touch-drag {
-  transform: scale(2.25);
+  transform: scale(2.8);
   z-index: 999;
 }
