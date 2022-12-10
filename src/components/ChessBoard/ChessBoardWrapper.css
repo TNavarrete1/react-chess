@@ -44,10 +44,11 @@
 .player-card {
   display: grid;
   grid-template-areas:
-    "avatar username ."
-    "avatar captures points";
-  grid-template-columns: min-content min-content auto;
+    "avatar username time"
+    "avatar capture-info time";
+  grid-template-columns: repeat(2, min-content) auto;
   grid-template-rows: 20px 30px;
+  position: relative;
   column-gap: 20px;
   padding: 5px;
   min-width: var(--layout-min-width);
@@ -76,10 +77,14 @@
   color: var(--color-white);
   white-space: nowrap;
 }
+.captures-wrapper {
+  grid-area: capture-info;
+  display: flex;
+  align-items: center;
+  gap: 7.5px;
+  height: 100%;
+}
 .captured-pieces {
-  grid-area: captures;
-  justify-self: flex-start;
-  padding-top: 5px;
   white-space: nowrap;
 }
 .piece-type {
@@ -92,14 +97,32 @@
   font-size: 20px;
 }
 .captured-points {
-  grid-area: points;
-  padding-top: 5px;
   color: var(--color-gray);
+}
+.time {
+  grid-area: time;
+  justify-self: flex-end;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  padding: 10px;
+  height: 100%;
+  width: 100px;
+  font-size: 20px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
 }
 
 @media screen and ((max-width: 375px) or (max-height: 375px)) {
+  #chess-board-wrapper {
+    --user-card-width: 50px;
+  }
   .player-card {
-    column-gap: 10px;
+    column-gap: 7px;
+    grid-template-rows: repeat(2, 20px);
   }
   .player-avatar {
     width: 40px;
@@ -112,7 +135,7 @@
     font-size: 12px;
   }
   .piece {
-    font-size: 16px;
+    font-size: 15px;
   }
   .captured-points {
     font-size: 13px;

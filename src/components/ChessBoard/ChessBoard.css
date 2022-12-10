@@ -16,7 +16,6 @@
   position: absolute;
   height: 100%;
   width: 100%;
-  background: rgba(0, 0, 0, 0.3);
   z-index: 999;
 }
 
@@ -93,4 +92,10 @@
 .touch-drag {
   transform: scale(2.8);
   z-index: 999;
+}
+
+@media screen and ((max-width: 375px) or (max-height: 375px)) {
+  #chess-board {
+    --border-size: 10px;
+  }
 }

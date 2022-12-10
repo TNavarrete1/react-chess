@@ -14,6 +14,7 @@ export default function GameDecision({
   winnerTxt,
   team,
   gameMode,
+  minutes,
   // Functions
   resetGame,
 }) {
@@ -63,7 +64,7 @@ export default function GameDecision({
                 }}
                 onClick={() => {
                   setIsComponentVisible(false);
-                  resetGame(team, gameMode, true);
+                  resetGame(team, gameMode, minutes, true);
                 }}
               >
                 Play Again

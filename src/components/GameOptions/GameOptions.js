@@ -8,10 +8,14 @@ import TeamOptions from "components/GameOptions/TeamOptions";
 import ModeOptions from "components/GameOptions/ModeOptions";
 
 function GameOptions({
+  // Data
+  minutes,
+  showHeader,
+  // Functions
+  chooseMin,
   handleBoardOrientationOption,
   handleGameMode,
   handleStartGame,
-  showHeader,
 }) {
   const [gameModeChosen, setGameModeChosen] = useState(false);
 
@@ -39,6 +43,10 @@ function GameOptions({
       )}
       {gameModeChosen ? (
         <TeamOptions
+          // Data
+          minutes={minutes}
+          // Functions
+          chooseMin={chooseMin}
           handleBoardOrientationOption={handleBoardOrientationOption}
           handleStartGame={handleStartGame}
         />

@@ -11,6 +11,7 @@ import MovementAfterEffect from "components/ChessBoard/MovementAfterEffect";
 function ChessBoard(
   {
     width,
+    resetToggle,
     boardOrientation,
     isBoardInactive,
     position,
@@ -100,7 +101,9 @@ function ChessBoard(
       e.preventDefault();
     };
     if (boardRef) {
-      boardRef.addEventListener("touchstart", handleTouchStart);
+      boardRef.addEventListener("touchstart", handleTouchStart, {
+        passive: false,
+      });
     }
 
     return () => {
@@ -117,7 +120,7 @@ function ChessBoard(
       square: "",
       activatedOnce: false,
     });
-  }, [isPreviewing, isBoardInactive]); // Resets chess board
+  }, [isPreviewing, resetToggle]); // Resets chess board
 
   return (
     <div id="chess-board" className="bg-tan" ref={ref}>

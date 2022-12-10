@@ -44,8 +44,8 @@ html {
 }
 
 #side-card {
-  min-height: 500px;
-  height: calc(100vh - 40px);
+  min-height: 600px;
+  height: calc(100vh - var(--horizontal-margin) * 2);
   width: 100%;
   max-width: var(--side-card-max-width);
   background: var(--bg-dark-secondary);
@@ -54,6 +54,10 @@ html {
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 @media screen and (max-width: 1000px) {
@@ -75,9 +79,7 @@ html {
   #side-card {
     margin-top: 20px;
     height: 80vh;
+    max-height: 800px;
     max-width: none;
   }
-}
-.clickable {
-  cursor: pointer;
 }

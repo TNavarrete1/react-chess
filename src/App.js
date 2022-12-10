@@ -41,6 +41,8 @@ function App() {
     canMovePieces: false,
     team: "white", // default team
     gameMode: "",
+    playerTurn: "white",
+    minutes: 1,
   }); // Tracks options chosen before game start
   const [lastMove, setLastMove] = useState({
     validMove: false,
@@ -80,6 +82,12 @@ function App() {
       });
     }
 
+    // Move was valid and game is not over
+    // Change player turn
+    setGameState((prev) => {
+      prev.playerTurn = prev.playerTurn === "white" ? "black" : "white";
+      return { ...prev };
+    });
     setLastMove((prev) => {
       prev.validMove = true;
       prev.color = move.color;
@@ -188,6 +196,11 @@ function App() {
 
       // Move was valid so update board
       if (targetSquare !== sourceSquare) {
+        // Change player turn
+        setGameState((prev) => {
+          prev.playerTurn = prev.playerTurn === "white" ? "black" : "white";
+          return { ...prev };
+        });
         setLastMove((prev) => {
           prev.validMove = true;
           prev.color = move.color;
@@ -304,6 +317,14 @@ function App() {
     });
   };
 
+  const chooseMin = (min) => {
+    setGameState((prev) => {
+      prev.minutes = min;
+
+      return { ...prev };
+    });
+  };
+
   const startGame = () => {
     let team, gameMode;
     setGameState((prev) => {
@@ -319,38 +340,41 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    const resizeChessBoard = () => {
-      setBoardWidth(chessBoard.current.clientWidth);
-    };
-
-    window.addEventListener("resize", resizeChessBoard);
-    resizeChessBoard();
-
-    return () => {
-      window.removeEventListener("resize", resizeChessBoard);
-    };
-  }, []);
-
-  const endGame = (resign = false) => {
-    setGameState((prev) => {
-      prev.gameOver = true;
-      prev.canMovePieces = false;
-      if (resign) {
-        prev.decisionTxt = "by Resignation";
-        if (gameState.gameMode === "computer") {
-          prev.winnerTxt = "Computer has won";
-        } else if (lastMove.color === "w") {
-          prev.winnerTxt = "Player 1 has won!";
-        } else {
-          prev.winnerTxt = "Player 2 has won!";
+  const endGame = useCallback(
+    ({ resign, timeout }) => {
+      setGameState((prev) => {
+        if (prev.gameOver) return prev;
+        prev.gameOver = true;
+        prev.canMovePieces = false;
+        if (resign || timeout) {
+          // Set decision txt
+          if (resign) {
+            prev.decisionTxt = "by Resignation";
+          } else if (timeout) {
+            prev.decisionTxt = "by timeout";
+          }
+          // Set winner txt
+          if (gameState.gameMode === "computer") {
+            prev.winnerTxt = "Computer has won";
+          } else if (gameState.playerTurn === "white") {
+            prev.winnerTxt = "Player 2 has won!";
+          } else {
+            prev.winnerTxt = "Player 1 has won!";
+          }
         }
-      }
-      return { ...prev };
-    });
-  };
 
-  const resetGame = (team = "white", gameMode = "", playingAgain = false) => {
+        return { ...prev };
+      });
+    },
+    [gameState.gameMode, gameState.playerTurn]
+  );
+
+  const resetGame = (
+    team = "white",
+    gameMode = "",
+    minutes = null,
+    playingAgain = false
+  ) => {
     game.reset();
     setResetToggle((prev) => {
       return !prev;
@@ -359,14 +383,18 @@ function App() {
     setPosition({ board: game.board(), move: null });
     setMoveHistory(null);
     setPositionHistory([{ board: game.board(), move: null, pgn: game.pgn() }]);
-    setGameState({
-      gameStart: playingAgain ? true : false,
-      gameOver: false,
-      decisionTxt: "",
-      winnerTxt: "",
-      canMovePieces: playingAgain ? true : false,
-      team,
-      gameMode,
+    setGameState((prev) => {
+      prev.gameStart = playingAgain ? true : false;
+      prev.gameOver = false;
+      prev.decisionTxt = "";
+      prev.winnerTxt = "";
+      prev.canMovePieces = playingAgain ? true : false;
+      prev.team = team;
+      prev.gameMode = gameMode;
+      prev.playerTurn = "white";
+      prev.minutes = minutes;
+
+      return { ...prev };
     });
     setPreview({
       isPreviewing: false,
@@ -392,6 +420,19 @@ function App() {
     });
   };
 
+  useEffect(() => {
+    const resizeChessBoard = () => {
+      setBoardWidth(chessBoard.current.clientWidth);
+    };
+
+    window.addEventListener("resize", resizeChessBoard);
+    resizeChessBoard();
+
+    return () => {
+      window.removeEventListener("resize", resizeChessBoard);
+    };
+  }, []);
+
   return (
     <>
       <GameDecision
@@ -401,22 +442,31 @@ function App() {
         winnerTxt={gameState.winnerTxt}
         team={gameState.team}
         gameMode={gameState.gameMode}
+        minutes={gameState.minutes}
         // Functions
         resetGame={resetGame}
       />
       <div id="layout" ref={layout}>
         <ChessBoardWrapper
+          // Data
           resetToggle={resetToggle}
+          gameStart={gameState.gameStart}
+          gameOver={gameState.gameOver}
           boardOrientation={boardOrientation}
           gameMode={gameState.gameMode}
           team={gameState.team}
+          minutes={gameState.minutes}
+          playerTurn={gameState.playerTurn}
           lastMove={lastMove}
           movedAfterPreview={preview.movedAfterPreview}
           currMoveNum={preview.moveNum}
+          // Functions
+          endGame={endGame}
           children={
             <ChessBoard
               ref={chessBoard}
               width={boardWidth}
+              resetToggle={resetToggle}
               boardOrientation={boardOrientation}
               isBoardInactive={false}
               position={position.board}
@@ -444,10 +494,14 @@ function App() {
             />
           ) : (
             <GameOptions
+              // Data
+              minutes={gameState.minutes}
+              showHeader={true}
+              // Functions
+              chooseMin={chooseMin}
               handleBoardOrientationOption={changeBoardOrientation}
               handleGameMode={chooseGameMode}
               handleStartGame={startGame}
-              showHeader={true}
             />
           )}
         </div>
