@@ -1,12 +1,12 @@
 #board-orientation-list {
   display: grid;
   grid-template-areas:
-    "header header header"
-    "white-board-orientation random-board-orientation black-board-orientation"
-    "play-button play-button play-button";
-  grid-template-rows: repeat(2, min-content) auto;
-  row-gap: 25px;
-  column-gap: 20px;
+    "header"
+    "team-buttons"
+    "time-buttons"
+    "play-button";
+  grid-template-rows: repeat(3, min-content) 1fr;
+  gap: 25px;
   height: 100%;
   text-align: center;
   padding: 15px var(--padding-right) 40px var(--padding-left);
@@ -16,15 +16,11 @@
   font-size: 23px;
   font-weight: 500;
 }
-
-#white-board-orientation-icon {
-  grid-area: white-board-orientation;
-}
-#random-board-orientation-icon {
-  grid-area: random-board-orientation;
-}
-#black-board-orientation-icon {
-  grid-area: black-board-orientation;
+#team-buttons {
+  grid-area: team-buttons;
+  display: grid;
+  grid-template-columns: repeat(3, min-content);
+  gap: 5px;
 }
 .board-orientation-button {
   background: transparent;
@@ -41,6 +37,45 @@
 .board-orientation-button-highlight {
   box-shadow: inset 0 0 0 3px var(--bg-primary);
   border-radius: 10px;
+}
+#time-options {
+  grid-area: time-buttons;
+  position: relative;
+  width: 100%;
+}
+#time-options-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  gap: 10px;
+  padding: 20px;
+  width: 100%;
+  font-weight: 600;
+  border-radius: 10px;
+  color: var(--color-black);
+  background: var(--bg-gray);
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+#time-options-btn:hover {
+  background: var(--bg-gray300);
+}
+#time-options-btn svg {
+  font-size: 25px;
+  color: var(--color-primary);
+}
+#time-options-btn span {
+  font-size: 20px;
+}
+#time-option-chevron {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto 0;
+  margin-right: 20px;
+  color: var(--color-dark-gray500) !important;
 }
 
 #start-game-button {

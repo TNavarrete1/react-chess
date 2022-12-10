@@ -21,13 +21,20 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 
 export default function ChessBoardWrapper({
+  // Data
   resetToggle,
   boardOrientation,
+  gameStart,
+  gameOver,
   gameMode,
   team,
+  minutes,
+  playerTurn,
   lastMove,
   movedAfterPreview,
   currMoveNum,
+  // Functions
+  endGame,
   children,
 }) {
   const [players, setPlayers] = useState({
@@ -36,12 +43,16 @@ export default function ChessBoardWrapper({
       team: "white",
       captures: { p: 0, b: 0, n: 0, r: 0, q: 0 },
       capturePoints: 0,
+      minutes,
+      seconds: 0,
     },
     bottom: {
       name: "player 2",
       team: "black",
       captures: { p: 0, b: 0, n: 0, r: 0, q: 0 },
       capturePoints: 0,
+      minutes,
+      seconds: 0,
     },
   });
   const [playersHistory, setPlayersHistory] = useState([]);
@@ -96,16 +107,26 @@ export default function ChessBoardWrapper({
       // Switch captures and points
       let topCaptures, bottomCaptures;
       let topPoints, bottomPoints;
+      let topMin, bottomMin;
+      let topSec, bottomSec;
       if (topTeam === prev.top.team) {
         topCaptures = prev.top.captures;
         topPoints = prev.top.capturePoints;
+        topMin = prev.top.minutes;
+        topSec = prev.top.seconds;
         bottomCaptures = prev.bottom.captures;
         bottomPoints = prev.bottom.capturePoints;
+        bottomMin = prev.bottom.minutes;
+        bottomSec = prev.bottom.seconds;
       } else {
         topCaptures = prev.bottom.captures;
         topPoints = prev.bottom.capturePoints;
+        topMin = prev.bottom.minutes;
+        topSec = prev.bottom.seconds;
         bottomCaptures = prev.top.captures;
         bottomPoints = prev.top.capturePoints;
+        bottomMin = prev.top.minutes;
+        bottomSec = prev.top.seconds;
       }
 
       // Set teams
@@ -116,6 +137,11 @@ export default function ChessBoardWrapper({
       prev.bottom.captures = bottomCaptures;
       prev.top.capturePoints = topPoints;
       prev.bottom.capturePoints = bottomPoints;
+      // Set minutes and seconds
+      prev.top.minutes = topMin;
+      prev.top.seconds = topSec;
+      prev.bottom.minutes = bottomMin;
+      prev.bottom.seconds = bottomSec;
 
       return { ...prev };
     });
@@ -229,6 +255,11 @@ export default function ChessBoardWrapper({
     } else return null;
   };
 
+  const renderTime = (minutes, seconds) => {
+    if (seconds < 10) return `${minutes}:0${seconds}`;
+    return `${minutes}:${seconds}`;
+  };
+
   // Reset
   useEffect(() => {
     setPlayers((prev) => {
@@ -238,10 +269,63 @@ export default function ChessBoardWrapper({
       // Reset capture points
       prev.top.capturePoints = 0;
       prev.bottom.capturePoints = 0;
+      // Reset time
+      prev.top.minutes = minutes;
+      prev.top.seconds = 0;
+      prev.bottom.minutes = minutes;
+      prev.bottom.seconds = 0;
 
       return { ...prev };
     });
-  }, [resetToggle]);
+  }, [resetToggle, minutes]);
+
+  // Set clock countdown
+  useEffect(() => {
+    if (!gameStart) return;
+
+    let intervalNeedsClearing = false;
+    const countdown = setInterval(() => {
+      setPlayers((prev) => {
+        // Determin if interval needs to be cleared
+        if (
+          (prev.top.minutes === 0 && prev.top.seconds === 0) ||
+          (prev.bottom.minutes === 0 && prev.bottom.seconds === 0)
+        ) {
+          intervalNeedsClearing = true;
+          return prev;
+        }
+        // Reduce time
+        if (playerTurn === prev.top.team) {
+          if (prev.top.minutes > 0 && prev.top.seconds === 0) {
+            prev.top.minutes -= 1;
+            prev.top.seconds = 59;
+          } else {
+            prev.top.seconds -= 1;
+          }
+        } else {
+          if (prev.bottom.minutes > 0 && prev.bottom.seconds === 0) {
+            prev.bottom.minutes -= 1;
+            prev.bottom.seconds = 59;
+          } else {
+            prev.bottom.seconds -= 1;
+          }
+        }
+        return { ...prev };
+      });
+      // Clear interval because timer is out of time or game is over
+      if (gameOver || intervalNeedsClearing) {
+        clearInterval(countdown);
+        // End game by timeout
+        if (intervalNeedsClearing) {
+          endGame({ timeout: true });
+        }
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(countdown);
+    };
+  }, [gameStart, gameOver, playerTurn, endGame]);
 
   // Switch top and bottom when necessary
   useEffect(() => {
@@ -326,29 +410,43 @@ export default function ChessBoardWrapper({
       <div className="player-card">
         <div className="player-avatar">{renderAvatar(players.top)}</div>
         <header className="username">{players.top.name}</header>
-        <div className="captured-pieces">
-          {renderCaptures(players.top.team, players.top.captures)}
+        <div className="captures-wrapper">
+          <div className="captured-pieces">
+            {renderCaptures(players.top.team, players.top.captures)}
+          </div>
+          <div className="captured-points">
+            {renderPoints(
+              players.top.capturePoints,
+              players.bottom.capturePoints
+            )}
+          </div>
         </div>
-        <div className="captured-points">
-          {renderPoints(
-            players.top.capturePoints,
-            players.bottom.capturePoints
-          )}
-        </div>
+        {minutes && (
+          <div className="time">
+            {renderTime(players.top.minutes, players.top.seconds)}
+          </div>
+        )}
       </div>
       {children}
       <div className="player-card">
         <div className="player-avatar">{renderAvatar(players.bottom)}</div>
         <header className="username">{players.bottom.name}</header>
-        <div className="captured-pieces">
-          {renderCaptures(players.bottom.team, players.bottom.captures)}
+        <div className="captures-wrapper">
+          <div className="captured-pieces">
+            {renderCaptures(players.bottom.team, players.bottom.captures)}
+          </div>
+          <div className="captured-points">
+            {renderPoints(
+              players.bottom.capturePoints,
+              players.top.capturePoints
+            )}
+          </div>
         </div>
-        <div className="captured-points">
-          {renderPoints(
-            players.bottom.capturePoints,
-            players.top.capturePoints
-          )}
-        </div>
+        {minutes && (
+          <div className="time">
+            {renderTime(players.bottom.minutes, players.bottom.seconds)}
+          </div>
+        )}
       </div>
     </div>
   );

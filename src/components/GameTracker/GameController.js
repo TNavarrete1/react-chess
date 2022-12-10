@@ -41,7 +41,7 @@ function GameController({
   };
 
   const resign = () => {
-    endGame(true);
+    endGame({ resign: true });
   };
 
   const renderClickableIconWithInfo = (

@@ -21,7 +21,7 @@ function GameHeaders({ resetGame }) {
 
   const createNewGame = () => {
     removePromptNewGame();
-    resetGame();
+    resetGame("white", "", 1);
   };
 
   return (

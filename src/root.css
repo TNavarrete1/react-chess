@@ -31,6 +31,7 @@
   --color-dark-secondary: #223d69;
   --color-dark-blue: #2d2d69;
   --color-dark-gray100: #3f3f3f;
+  --color-dark-gray500: #252525;
   --color-dark-gray700: #1f1f1f;
   --color-dark-gray900: #131313;
 
@@ -39,7 +40,9 @@
   --bg-secondary: #4075c9;
   --bg-black: #141414;
   --bg-gray: #dadada;
-  --bg-gray500: #ababab;
+  --bg-gray100: #cacaca;
+  --bg-gray300: #bababa;
+  --bg-gray500: #aaaaaa;
   --bg-gray900: #4f4f4f;
   --bg-white: #fff8f8;
   --bg-blue: #6767f0;
