@@ -40,6 +40,7 @@
 }
 #time-options {
   grid-area: time-buttons;
+  --border-radius: 10px;
   position: relative;
   width: 100%;
 }
@@ -52,7 +53,7 @@
   padding: 20px;
   width: 100%;
   font-weight: 600;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   color: var(--color-black);
   background: var(--bg-gray);
   cursor: pointer;
@@ -76,6 +77,36 @@
   margin: auto 0;
   margin-right: 20px;
   color: var(--color-dark-gray500) !important;
+}
+#time-pulldown-wrapper {
+  position: absolute;
+  top: calc(100% - var(--border-radius));
+  max-height: 200px;
+  width: 100%;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  background: var(--bg-white);
+  overflow: auto;
+}
+#time-pulldown-btns {
+  display: flex;
+  flex-direction: column;
+  margin: var(--border-radius) 0 calc(var(--border-radius) + 5px) 0;
+}
+.pulldown-btn {
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-black);
+  background: (--bg-white);
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+.pulldown-btn:hover {
+  background: var(--bg-gray100);
+}
+.active-min-btn {
+  color: var(--color-white) !important;
+  background: var(--bg-primary) !important;
 }
 
 #start-game-button {

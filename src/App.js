@@ -42,7 +42,7 @@ function App() {
     team: "white", // default team
     gameMode: "",
     playerTurn: "white",
-    minutes: 1,
+    minutes: null,
   }); // Tracks options chosen before game start
   const [lastMove, setLastMove] = useState({
     validMove: false,
@@ -466,6 +466,7 @@ function App() {
             <ChessBoard
               ref={chessBoard}
               width={boardWidth}
+              gameOver={gameState.gameOver}
               resetToggle={resetToggle}
               boardOrientation={boardOrientation}
               isBoardInactive={false}

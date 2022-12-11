@@ -20,10 +20,9 @@ function TeamOptions({
   handleStartGame,
 }) {
   const [clickedOrientation, setClickedOrientation] = useState("white");
-  const { ref, toggleRef, isComponentVisible } = useComponentVisible(
-    false,
-    true
-  );
+  const [clickedMin, setClickedMin] = useState("inf");
+  const { ref, toggleRef, isComponentVisible, setIsComponentVisible } =
+    useComponentVisible(false, true);
 
   const onClickTeamOption = (e) => {
     const boardOrientation = e.currentTarget.dataset.boardOrientation;
@@ -42,6 +41,10 @@ function TeamOptions({
     } else {
       chooseMin(parseInt(min));
     }
+    // Activate button
+    setClickedMin(min);
+    // Close pulldown
+    setIsComponentVisible(false);
   };
 
   return (
@@ -103,29 +106,72 @@ function TeamOptions({
       </div>
       <div id="time-options">
         {isComponentVisible && (
-          <div ref={ref} id="time-pulldown-btns">
-            <button
-              className="pulldown-btn"
-              data-min="inf"
-              onClick={chooseTime}
-            >
-              unlimited
-            </button>
-            <button className="pulldown-btn" data-min="1" onClick={chooseTime}>
-              1 min
-            </button>
-            <button className="pulldown-btn" data-min="3" onClick={chooseTime}>
-              3 min
-            </button>
-            <button className="pulldown-btn" data-min="5" onClick={chooseTime}>
-              5 min
-            </button>
-            <button className="pulldown-btn" data-min="10" onClick={chooseTime}>
-              10 min
-            </button>
-            <button className="pulldown-btn" data-min="30" onClick={chooseTime}>
-              30 min
-            </button>
+          <div id="time-pulldown-wrapper">
+            <div ref={ref} id="time-pulldown-btns">
+              <button
+                className={`pulldown-btn ${
+                  clickedMin === "inf" && "active-min-btn"
+                }`}
+                data-min="inf"
+                onClick={chooseTime}
+              >
+                unlimited
+              </button>
+              <button
+                className={`pulldown-btn ${
+                  clickedMin === "1" && "active-min-btn"
+                }`}
+                data-min="1"
+                onClick={chooseTime}
+              >
+                1 min
+              </button>
+              <button
+                className={`pulldown-btn ${
+                  clickedMin === "3" && "active-min-btn"
+                }`}
+                data-min="3"
+                onClick={chooseTime}
+              >
+                3 min
+              </button>
+              <button
+                className={`pulldown-btn ${
+                  clickedMin === "5" && "active-min-btn"
+                }`}
+                data-min="5"
+                onClick={chooseTime}
+              >
+                5 min
+              </button>
+              <button
+                className={`pulldown-btn ${
+                  clickedMin === "10" && "active-min-btn"
+                }`}
+                data-min="10"
+                onClick={chooseTime}
+              >
+                10 min
+              </button>
+              <button
+                className={`pulldown-btn ${
+                  clickedMin === "30" && "active-min-btn"
+                }`}
+                data-min="30"
+                onClick={chooseTime}
+              >
+                30 min
+              </button>
+              <button
+                className={`pulldown-btn ${
+                  clickedMin === "45" && "active-min-btn"
+                }`}
+                data-min="45"
+                onClick={chooseTime}
+              >
+                45 min
+              </button>
+            </div>
           </div>
         )}
         <button ref={toggleRef} id="time-options-btn">
