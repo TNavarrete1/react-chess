@@ -11,6 +11,7 @@ import MovementAfterEffect from "components/ChessBoard/MovementAfterEffect";
 function ChessBoard(
   {
     width,
+    gameOver,
     resetToggle,
     boardOrientation,
     isBoardInactive,
@@ -120,7 +121,7 @@ function ChessBoard(
       square: "",
       activatedOnce: false,
     });
-  }, [isPreviewing, resetToggle]); // Resets chess board
+  }, [isPreviewing, resetToggle, gameOver]); // Resets chess board
 
   return (
     <div id="chess-board" className="bg-tan" ref={ref}>

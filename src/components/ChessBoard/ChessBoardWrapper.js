@@ -281,7 +281,7 @@ export default function ChessBoardWrapper({
 
   // Set clock countdown
   useEffect(() => {
-    if (!gameStart) return;
+    if (!gameStart || !minutes) return;
 
     let intervalNeedsClearing = false;
     const countdown = setInterval(() => {
@@ -325,7 +325,7 @@ export default function ChessBoardWrapper({
     return () => {
       clearInterval(countdown);
     };
-  }, [gameStart, gameOver, playerTurn, endGame]);
+  }, [gameStart, minutes, gameOver, playerTurn, endGame]);
 
   // Switch top and bottom when necessary
   useEffect(() => {
