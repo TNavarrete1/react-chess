@@ -255,11 +255,6 @@ export default function ChessBoardWrapper({
     } else return null;
   };
 
-  const renderTime = (minutes, seconds) => {
-    if (seconds < 10) return `${minutes}:0${seconds}`;
-    return `${minutes}:${seconds}`;
-  };
-
   // Reset
   useEffect(() => {
     setPlayers((prev) => {
@@ -423,7 +418,12 @@ export default function ChessBoardWrapper({
         </div>
         {minutes && (
           <div className="time">
-            {renderTime(players.top.minutes, players.top.seconds)}
+            {minutes &&
+              `${players.top.minutes}:${
+                players.top.seconds < 10
+                  ? `0${players.top.seconds}`
+                  : players.top.seconds
+              }`}
           </div>
         )}
       </div>
@@ -444,7 +444,12 @@ export default function ChessBoardWrapper({
         </div>
         {minutes && (
           <div className="time">
-            {renderTime(players.bottom.minutes, players.bottom.seconds)}
+            {minutes &&
+              `${players.bottom.minutes}:${
+                players.bottom.seconds < 10
+                  ? `0${players.bottom.seconds}`
+                  : players.bottom.seconds
+              }`}
           </div>
         )}
       </div>
