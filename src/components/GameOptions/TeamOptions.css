@@ -97,7 +97,7 @@
   font-size: 16px;
   font-weight: 500;
   color: var(--color-black);
-  background: (--bg-white);
+  background: var(--bg-white);
   cursor: pointer;
   transition: all 0.15s ease-in-out;
 }
