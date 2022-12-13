@@ -1,7 +1,7 @@
 // Styles
 import "components/ChessBoard/ChessBoardWrapper.css";
 // Components
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChessKing,
@@ -261,6 +261,8 @@ export default function ChessBoardWrapper({
     return `${minutes}:${seconds}`;
   };
 
+  const intervalId = useRef();
+
   // Reset
   useEffect(() => {
     setPlayers((prev) => {
@@ -282,10 +284,10 @@ export default function ChessBoardWrapper({
 
   // Set clock countdown
   useEffect(() => {
-    if (!gameStart || !minutes) return;
+    if (!gameStart || !minutes || intervalId.current) return;
 
     let intervalNeedsClearing = false;
-    const countdown = setInterval(() => {
+    intervalId.current = setInterval(() => {
       setPlayers((prev) => {
         // Determin if interval needs to be cleared
         if (
@@ -312,23 +314,17 @@ export default function ChessBoardWrapper({
           }
         }
         // Cause re-render
-        prev.top = { ...prev.top };
-        prev.bottom = { ...prev.bottom };
         return { ...prev };
       });
       // Clear interval because timer is out of time or game is over
       if (gameOver || intervalNeedsClearing) {
-        clearInterval(countdown);
+        clearInterval(intervalId.current);
         // End game by timeout
         if (intervalNeedsClearing) {
           endGame({ timeout: true });
         }
       }
     }, 1000);
-
-    return () => {
-      clearInterval(countdown);
-    };
   }, [gameStart, minutes, gameOver, playerTurn, endGame]);
 
   // Switch top and bottom when necessary
