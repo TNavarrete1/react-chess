@@ -42,15 +42,16 @@
 }
 
 .player-card {
+  --card-padding: 5px;
   display: grid;
   grid-template-areas:
-    "avatar username time"
-    "avatar capture-info time";
-  grid-template-columns: repeat(2, min-content) auto;
+    "avatar username"
+    "avatar capture-info";
+  grid-template-columns: repeat(2, min-content);
   grid-template-rows: 20px 30px;
   position: relative;
   column-gap: 20px;
-  padding: 5px;
+  padding: var(--card-padding);
   min-width: var(--layout-min-width);
   background: var(--bg-dark-gray500);
 }
@@ -100,13 +101,15 @@
   color: var(--color-gray);
 }
 .time {
-  grid-area: time;
-  justify-self: flex-end;
+  position: absolute;
+  top: 0;
+  right: 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin: var(--card-padding);
   padding: 10px;
-  height: 100%;
+  height: calc(100% - var(--card-padding) * 2);
   width: 100px;
   font-size: 20px;
   font-weight: 600;
