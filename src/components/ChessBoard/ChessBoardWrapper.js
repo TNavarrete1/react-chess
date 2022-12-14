@@ -1,7 +1,7 @@
 // Styles
 import "components/ChessBoard/ChessBoardWrapper.css";
 // Components
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChessKing,
@@ -255,13 +255,22 @@ export default function ChessBoardWrapper({
     } else return null;
   };
 
-  const renderTime = (minutes, seconds) => {
-    if (minutes === null) return;
-    if (seconds < 10) return `${minutes}:0${seconds}`;
-    return `${minutes}:${seconds}`;
-  };
+  const renderTime = (minutes, seconds, id) => {
+    if (minutes === null) return null;
 
-  const intervalId = useRef();
+    let timeTxt;
+    if (seconds < 10) {
+      timeTxt = `${minutes}:0${seconds}`;
+    } else {
+      timeTxt = `${minutes}:${seconds}`;
+    }
+    // Key changes on each function call: forces re-renders
+    return (
+      <div key={id} className="time">
+        {timeTxt}
+      </div>
+    );
+  };
 
   // Reset
   useEffect(() => {
@@ -284,17 +293,16 @@ export default function ChessBoardWrapper({
 
   // Set clock countdown
   useEffect(() => {
-    if (!gameStart || !minutes || intervalId.current) return;
+    if (!minutes || !gameStart || gameOver) return;
 
     let intervalNeedsClearing = false;
-    intervalId.current = setInterval(() => {
+    const intervalId = setInterval(() => {
       setPlayers((prev) => {
-        // Determin if interval needs to be cleared
+        // Don't update state
         if (
           (prev.top.minutes === 0 && prev.top.seconds === 0) ||
           (prev.bottom.minutes === 0 && prev.bottom.seconds === 0)
         ) {
-          intervalNeedsClearing = true;
           return prev;
         }
         // Reduce time
@@ -313,18 +321,29 @@ export default function ChessBoardWrapper({
             prev.bottom.seconds -= 1;
           }
         }
+        // Determin if interval needs to be cleared
+        if (
+          (prev.top.minutes === 0 && prev.top.seconds === 0) ||
+          (prev.bottom.minutes === 0 && prev.bottom.seconds === 0)
+        ) {
+          intervalNeedsClearing = true;
+        }
         // Cause re-render
         return { ...prev };
       });
       // Clear interval because timer is out of time or game is over
       if (gameOver || intervalNeedsClearing) {
-        clearInterval(intervalId.current);
+        clearInterval(intervalId);
         // End game by timeout
         if (intervalNeedsClearing) {
           endGame({ timeout: true });
         }
       }
     }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, [gameStart, minutes, gameOver, playerTurn, endGame]);
 
   // Switch top and bottom when necessary
@@ -421,11 +440,12 @@ export default function ChessBoardWrapper({
             )}
           </div>
         </div>
-        {minutes && (
-          <div className="time">
-            {renderTime(players.top.minutes, players.top.seconds)}
-          </div>
-        )}
+        {minutes &&
+          renderTime(
+            players.top.minutes,
+            players.top.seconds,
+            JSON.stringify(players.top)
+          )}
       </div>
       {children}
       <div className="player-card">
@@ -442,11 +462,12 @@ export default function ChessBoardWrapper({
             )}
           </div>
         </div>
-        {minutes && (
-          <div className="time">
-            {renderTime(players.bottom.minutes, players.bottom.seconds)}
-          </div>
-        )}
+        {minutes &&
+          renderTime(
+            players.bottom.minutes,
+            players.bottom.seconds,
+            JSON.stringify(players.bottom)
+          )}
       </div>
     </div>
   );
