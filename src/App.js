@@ -124,7 +124,13 @@ function App() {
 
   // Runs when a piece is dropped on the board
   const handlePieceDrop = useCallback(
-    (sourceSquare, targetSquare) => {
+    (sourceSquare, targetSquare, piece) => {
+      // Check if it's one of your pieces you are moving
+      if (
+        gameState.gameMode === "computer" &&
+        gameState.team[0] !== piece.pieceColor
+      )
+        return false;
       // Moves piece
       let move = game.move({
         from: sourceSquare,
@@ -265,6 +271,7 @@ function App() {
     },
     [
       gameState.gameMode,
+      gameState.team,
       positionHistory,
       preview.isPreviewing,
       preview.moveNum,
@@ -273,10 +280,18 @@ function App() {
   );
 
   // Runs when piece is first dragged
-  const handlePieceDragBegin = useCallback((sourceSquare, piece) => {
-    const moves = game.moves({ square: sourceSquare, verbose: true });
-    return moves;
-  }, []);
+  const handlePieceDragBegin = useCallback(
+    (sourceSquare, piece) => {
+      if (
+        gameState.gameMode === "computer" &&
+        gameState.team[0] !== piece.pieceColor
+      )
+        return null;
+      const moves = game.moves({ square: sourceSquare, verbose: true });
+      return moves;
+    },
+    [gameState.gameMode, gameState.team]
+  );
 
   // Change board orientation to chosen value
   const changeBoardOrientation = (boardOrientation) => {
@@ -326,6 +341,7 @@ function App() {
   };
 
   const startGame = () => {
+    console.log("start");
     let team, gameMode;
     setGameState((prev) => {
       gameMode = prev.gameMode;
@@ -373,7 +389,7 @@ function App() {
     team = "white",
     gameMode = "",
     minutes = null,
-    playingAgain = false
+    startGame = false
   ) => {
     game.reset();
     setResetToggle((prev) => {
@@ -384,11 +400,11 @@ function App() {
     setMoveHistory(null);
     setPositionHistory([{ board: game.board(), move: null, pgn: game.pgn() }]);
     setGameState((prev) => {
-      prev.gameStart = playingAgain ? true : false;
+      prev.gameStart = startGame ? true : false;
       prev.gameOver = false;
       prev.decisionTxt = "";
       prev.winnerTxt = "";
-      prev.canMovePieces = playingAgain ? true : false;
+      prev.canMovePieces = startGame ? true : false;
       prev.team = team;
       prev.gameMode = gameMode;
       prev.playerTurn = "white";
@@ -406,6 +422,10 @@ function App() {
       captured: null,
       color: "",
     });
+
+    if (gameMode === "computer" && game.turn() !== team[0]) {
+      window.setTimeout(makeRandomMove, 1000);
+    }
   };
 
   const previewPosition = (moveNum) => {

@@ -10,6 +10,8 @@ function DraggableElement({
   pieceName,
   pieceColor,
   canMovePieces,
+  // Functions
+  onPieceDragBegin,
   onPieceDrop,
   onSquareHover,
   activateSelectedPieceEffects,
@@ -35,13 +37,24 @@ function DraggableElement({
       getComputedStyle(el).getPropertyValue("border-width").slice(0, -2)
     );
 
+    let tmpEl;
     // Get parent offsets
-    while (el.offsetParent) {
+    tmpEl = el;
+    while (tmpEl) {
       // Empty space
-      offsets.left += parseInt(el.offsetLeft);
-      offsets.top += parseInt(el.offsetTop);
-      el = el.offsetParent;
+      offsets.left += parseInt(tmpEl.offsetLeft);
+      offsets.top += parseInt(tmpEl.offsetTop);
+      tmpEl = tmpEl.offsetParent;
     }
+
+    // Get root Scroll (overflow)
+    offsets.left -= parseInt(document.querySelector("#root").scrollLeft);
+    offsets.top -= parseInt(document.querySelector("#root").scrollTop);
+
+    // Get window Scroll
+    offsets.left -= parseInt(window.scrollX);
+    offsets.top -= parseInt(window.scrollY);
+
     // Get chess border widths if any
     offsets.left += borderSize;
     offsets.top += borderSize;
@@ -188,7 +201,10 @@ function DraggableElement({
       */
       onSquareHover(""); // Removes square hover effect
       const targetSquare = getBoardSquare(boardOrientation, posX, posY);
-      const move = onPieceDrop(currSquare, targetSquare);
+      const move = onPieceDrop(currSquare, targetSquare, {
+        pieceName,
+        pieceColor,
+      });
       // Move was valid
       if (move) {
         deactivateSelectedPieceEffects(targetSquare); // Removes possible moves and highlighted square
@@ -217,15 +233,19 @@ function DraggableElement({
       onPieceDrop,
       onSquareHover,
       deactivateSelectedPieceEffects,
+      pieceColor,
+      pieceName,
     ]
   );
 
   const onDragStart = useCallback(
     (e) => {
+      e.preventDefault(); // Prevents text selection on drag and touch effects
+      // Check if pieces are activated
       if (!canMovePieces) {
         return;
       }
-      e.preventDefault(); // Prevents text selection on drag and touch effects
+
       if (e.type === "touchstart") {
         document.querySelector("body").classList.add("lock-screen");
         touchObject.current = e.targetTouches[0];
