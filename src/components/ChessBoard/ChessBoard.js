@@ -192,13 +192,15 @@ function ChessBoard(
                   pieceName={square.type}
                   pieceColor={square.color}
                   canMovePieces={canMovePieces}
-                  // Functions
+                  // Functionson
+                  onPieceDragBegin={onPieceDragBegin}
                   onPieceDrop={onPieceDrop}
                   onSquareHover={handleSquareHover}
                   activateSelectedPieceEffects={activateSelectedPieceEffects}
                   deactivateSelectedPieceEffects={
                     deactivateSelectedPieceEffects
                   }
+                  // Ref
                   chessBoard={ref}
                 />
               );
