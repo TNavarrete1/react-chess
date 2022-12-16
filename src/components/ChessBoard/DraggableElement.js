@@ -11,7 +11,6 @@ function DraggableElement({
   pieceColor,
   canMovePieces,
   // Functions
-  onPieceDragBegin,
   onPieceDrop,
   onSquareHover,
   activateSelectedPieceEffects,

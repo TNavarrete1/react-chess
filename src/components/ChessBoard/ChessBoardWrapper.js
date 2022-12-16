@@ -447,7 +447,10 @@ export default function ChessBoardWrapper({
             JSON.stringify(players.top)
           )}
       </div>
-      {children}
+      {
+        // Chess board
+        children
+      }
       <div className="player-card">
         <div className="player-avatar">{renderAvatar(players.bottom)}</div>
         <header className="username">{players.bottom.name}</header>
