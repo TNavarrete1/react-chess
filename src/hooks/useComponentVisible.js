@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
-export default function useComponentVisible(isInitVisible, toggable) {
+export default function useComponentVisible(isInitVisible, toggable = null) {
   const [isComponentVisible, setIsComponentVisible] = useState(isInitVisible);
   const ref = useRef(null);
   const toggleRef = useRef(null);

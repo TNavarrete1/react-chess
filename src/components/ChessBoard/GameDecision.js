@@ -33,15 +33,6 @@ export default function GameDecision({
     }
   }, [gameOver, setIsComponentVisible]);
 
-  // Removes body scroll when modal is active
-  useEffect(() => {
-    if (isComponentVisible) {
-      document.querySelector("body").classList.add("lock-screen");
-    } else {
-      document.querySelector("body").classList.remove("lock-screen");
-    }
-  }, [isComponentVisible]);
-
   return (
     <>
       {isComponentVisible && (
@@ -51,10 +42,10 @@ export default function GameDecision({
               <FontAwesomeIcon icon={faXmark} />
             </div>
             <header>Game Over!</header>
-            <p>
-              <span id="winner-txt">{winnerTxt}</span>
-              <span id="decision-txt">{decisionTxt}</span>
-            </p>
+            <div id="txt-wrapper">
+              <div id="winner-txt">{winnerTxt}</div>
+              <div id="decision-txt">{decisionTxt}</div>
+            </div>
             <div id="game-over-buttons">
               <button
                 className="game-over-button"

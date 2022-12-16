@@ -147,9 +147,9 @@ function App() {
 
       // End Game
       if (game.isGameOver()) {
-        deactivatePieces();
         setGameState((prev) => {
           prev.gameOver = true;
+          prev.canMovePieces = false;
           // Last move game ending move was made by your team
           if (prev.gameMode === "computer") {
             prev.winnerTxt = "Congrats, you won!";
@@ -203,10 +203,12 @@ function App() {
       // Move was valid so update board
       if (targetSquare !== sourceSquare) {
         // Change player turn
-        setGameState((prev) => {
-          prev.playerTurn = prev.playerTurn === "white" ? "black" : "white";
-          return { ...prev };
-        });
+        if (!game.isGameOver()) {
+          setGameState((prev) => {
+            prev.playerTurn = prev.playerTurn === "white" ? "black" : "white";
+            return { ...prev };
+          });
+        }
         setLastMove((prev) => {
           prev.validMove = true;
           prev.color = move.color;
@@ -264,8 +266,8 @@ function App() {
         }
       }
 
-      if (gameState.gameMode === "computer") {
-        window.setTimeout(makeRandomMove, 500);
+      if (!game.isGameOver() && gameState.gameMode === "computer") {
+        window.setTimeout(makeRandomMove, 1000);
       }
       return true;
     },
@@ -341,7 +343,6 @@ function App() {
   };
 
   const startGame = () => {
-    console.log("start");
     let team, gameMode;
     setGameState((prev) => {
       gameMode = prev.gameMode;
