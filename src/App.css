@@ -1,10 +1,6 @@
 body,
 html {
-  background: linear-gradient(
-    to right bottom,
-    var(--bg-light-secondary),
-    var(--bg-secondary)
-  );
+  background: var(--bg-dark-gray500);
 }
 
 #root {
