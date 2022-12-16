@@ -517,6 +517,7 @@ function App() {
           ) : (
             <GameOptions
               // Data
+              team={gameState.team}
               minutes={gameState.minutes}
               showHeader={true}
               // Functions

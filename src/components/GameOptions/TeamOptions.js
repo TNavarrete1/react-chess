@@ -14,12 +14,13 @@ import { faChessKing } from "@fortawesome/free-regular-svg-icons";
 import useComponentVisible from "hooks/useComponentVisible";
 
 function TeamOptions({
+  team,
   minutes,
   chooseMin,
   handleBoardOrientationOption,
   handleStartGame,
 }) {
-  const [clickedOrientation, setClickedOrientation] = useState("white");
+  const [clickedOrientation, setClickedOrientation] = useState(team);
   const [clickedMin, setClickedMin] = useState("inf");
   const { ref, toggleRef, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false, true);
