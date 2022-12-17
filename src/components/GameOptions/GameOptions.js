@@ -9,6 +9,7 @@ import ModeOptions from "components/GameOptions/ModeOptions";
 
 function GameOptions({
   // Data
+  team,
   minutes,
   showHeader,
   // Functions
@@ -44,6 +45,7 @@ function GameOptions({
       {gameModeChosen ? (
         <TeamOptions
           // Data
+          team={team}
           minutes={minutes}
           // Functions
           chooseMin={chooseMin}
