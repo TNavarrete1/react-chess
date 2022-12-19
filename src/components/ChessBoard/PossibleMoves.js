@@ -32,8 +32,10 @@ function PossibleMoves({
   const moveToSquare = (e) => {
     const sourceSquare = e.currentTarget.dataset.sourceSquare;
     const targetSquare = e.currentTarget.dataset.targetSquare;
+    const pieceName = e.currentTarget.dataset.pieceName;
+    const pieceColor = e.currentTarget.dataset.pieceColor;
 
-    onPieceDrop(sourceSquare, targetSquare);
+    onPieceDrop(sourceSquare, targetSquare, { pieceName, pieceColor });
     deactivateSelectedPieceEffects();
   };
 
@@ -54,7 +56,10 @@ function PossibleMoves({
               style={{ top: `${square.posY}%`, left: `${square.posX}%` }}
               data-source-square={square.from}
               data-target-square={square.to}
+              data-piece-name={square.piece}
+              data-piece-color={square.color}
               onClick={moveToSquare}
+              onTouchStart={moveToSquare}
             >
               <div
                 className={`possible-move-${
