@@ -41,15 +41,13 @@
   height: 100%;
   background: var(--bg-dark-gray300);
   border-radius: 4px;
+  transition: all 0.15s ease-in-out;
 }
 .move:hover {
   background: var(--bg-gray900);
 }
 .active-move {
-  background: var(--bg-primary);
-}
-.active-move:hover {
-  background: var(--bg-primary);
+  background: var(--bg-primary) !important;
 }
 .move-san {
   margin-left: 5px;
