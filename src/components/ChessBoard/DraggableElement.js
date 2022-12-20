@@ -102,12 +102,13 @@ function DraggableElement({
       const chessBoardOffsets = getElOffsets(chessBoard.current);
       const squarePosX =
         Math.floor(
-          ((e.clientX || touchObject.current.pageX) - chessBoardOffsets.left) /
+          ((e.clientX || touchObject.current.clientX) -
+            chessBoardOffsets.left) /
             singlesquareSizePx
         ) * singlesquareSizePercent;
       const squarePosY =
         Math.floor(
-          ((e.clientY || touchObject.current.pageY) - chessBoardOffsets.top) /
+          ((e.clientY || touchObject.current.clientY) - chessBoardOffsets.top) /
             singlesquareSizePx
         ) * singlesquareSizePercent;
       const sourceSquare = getBoardSquare(
@@ -124,12 +125,12 @@ function DraggableElement({
       // Get mouse location relative to chessboard
       const halfOfPieceSizePercent = 6.25;
       let posX =
-        (((e.clientX || touchObject.current.pageX) - chessBoardOffsets.left) /
+        (((e.clientX || touchObject.current.clientX) - chessBoardOffsets.left) /
           chessBoard.current.clientWidth) *
           100 -
         halfOfPieceSizePercent;
       let posY =
-        (((e.clientY || touchObject.current.pageY) - chessBoardOffsets.top) /
+        (((e.clientY || touchObject.current.clientY) - chessBoardOffsets.top) /
           chessBoard.current.clientWidth) *
           100 -
         halfOfPieceSizePercent;
@@ -184,12 +185,13 @@ function DraggableElement({
       const chessBoardOffsets = getElOffsets(chessBoard.current);
       const posX =
         Math.floor(
-          ((e.clientX || touchObject.current.pageX) - chessBoardOffsets.left) /
+          ((e.clientX || touchObject.current.clientX) -
+            chessBoardOffsets.left) /
             singlesquareSizePx
         ) * singlesquareSizePercent;
       const posY =
         Math.floor(
-          ((e.clientY || touchObject.current.pageY) - chessBoardOffsets.top) /
+          ((e.clientY || touchObject.current.clientY) - chessBoardOffsets.top) /
             singlesquareSizePx
         ) * singlesquareSizePercent;
 
@@ -267,12 +269,12 @@ function DraggableElement({
       const chessBoardOffsets = getElOffsets(chessBoard.current);
       const halfOfPieceSize = 6.25;
       const posX =
-        (((e.clientX || touchObject.current.pageX) - chessBoardOffsets.left) /
+        (((e.clientX || touchObject.current.clientX) - chessBoardOffsets.left) /
           chessBoard.current.clientWidth) *
           100 -
         halfOfPieceSize;
       let posY =
-        (((e.clientY || touchObject.current.pageY) - chessBoardOffsets.top) /
+        (((e.clientY || touchObject.current.clientY) - chessBoardOffsets.top) /
           chessBoard.current.clientWidth) *
           100 -
         halfOfPieceSize;
