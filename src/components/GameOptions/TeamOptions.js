@@ -172,6 +172,15 @@ function TeamOptions({
               >
                 45 min
               </button>
+              <button
+                className={`pulldown-btn ${
+                  clickedMin === "60" && "active-min-btn"
+                }`}
+                data-min="60"
+                onClick={chooseTime}
+              >
+                60 min
+              </button>
             </div>
           </div>
         )}

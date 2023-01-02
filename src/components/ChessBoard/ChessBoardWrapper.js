@@ -255,7 +255,7 @@ export default function ChessBoardWrapper({
     } else return null;
   };
 
-  const renderTime = (minutes, seconds, id) => {
+  const renderTime = (minutes, seconds, team) => {
     if (minutes === null) return null;
 
     let timeTxt;
@@ -266,8 +266,12 @@ export default function ChessBoardWrapper({
     }
     // Key changes on each function call: forces re-renders
     return (
-      <div key={id} className="time">
-        {timeTxt}
+      <div
+        className={`time ${team === "white" ? "time-white" : "time-black"} ${
+          playerTurn === team && gameStart && !gameOver ? "active-time" : ""
+        }`}
+      >
+        <div className="time-txt">{timeTxt}</div>
       </div>
     );
   };
@@ -440,12 +444,7 @@ export default function ChessBoardWrapper({
             )}
           </div>
         </div>
-        {minutes &&
-          renderTime(
-            players.top.minutes,
-            players.top.seconds,
-            JSON.stringify(players.top)
-          )}
+        {renderTime(players.top.minutes, players.top.seconds, players.top.team)}
       </div>
       {
         // Chess board
@@ -465,12 +464,11 @@ export default function ChessBoardWrapper({
             )}
           </div>
         </div>
-        {minutes &&
-          renderTime(
-            players.bottom.minutes,
-            players.bottom.seconds,
-            JSON.stringify(players.bottom)
-          )}
+        {renderTime(
+          players.bottom.minutes,
+          players.bottom.seconds,
+          players.bottom.team
+        )}
       </div>
     </div>
   );

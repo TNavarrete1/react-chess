@@ -15,7 +15,6 @@
   grid-template-rows: 145px min-content auto;
   grid-template-columns: auto;
   margin: auto;
-  min-width: 300px;
   width: 100%;
   max-width: 400px;
   background: var(--bg-white);

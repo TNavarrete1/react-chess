@@ -51,43 +51,38 @@ function App() {
   });
   const [resetToggle, setResetToggle] = useState(false);
 
-  const makeRandomMove = useCallback(() => {
-    const possibleMoves = game.moves();
-    // No moves possible
-    if (possibleMoves.length === 0) return;
-
-    // Make random move
-    const randomIdx = Math.floor(Math.random() * possibleMoves.length);
-    const move = game.move(possibleMoves[randomIdx]);
-
-    // End game
-    if (game.isGameOver()) {
-      deactivatePieces();
-      setGameState((prev) => {
-        prev.gameOver = true;
-        prev.winnerTxt = "Computer has won";
-        if (game.isCheckmate()) {
-          prev.decisionTxt = "by checkmate";
-        } else if (game.isDraw()) {
-          prev.winnerTxt = "Draw!";
-          if (game.isStalemate()) {
-            prev.decisionTxt = "by stalemate";
-          } else if (game.isInsufficientMaterial()) {
-            prev.decisionTxt = "by insufficient material";
-          } else if (game.isThreefoldRepetition()) {
-            prev.decisionTxt = "by threefold repetition";
-          }
-        }
-        return { ...prev };
-      });
-    }
-
-    // Move was valid and game is not over
-    // Change player turn
-    setGameState((prev) => {
-      prev.playerTurn = prev.playerTurn === "white" ? "black" : "white";
+  // *********************************************************************************
+  // *********************************************************************************
+  // Helper functions
+  const handleInvalidMove = ({ isPreviewing, positionHistory }) => {
+    setLastMove((prev) => {
+      prev.validMove = false;
+      prev.captured = null;
+      prev.color = "";
       return { ...prev };
     });
+    if (isPreviewing) {
+      game.loadPgn(positionHistory[positionHistory.length - 1].pgn);
+      // Makes sure preview is reset if pieceDrop is done during a preview
+      setPreview({
+        isPreviewing: false,
+        movedAfterPreview: false,
+        moveNum: positionHistory.length - 1,
+      });
+      // Moves pieces back to latest position on invalid move
+      setPosition({
+        board: positionHistory[positionHistory.length - 1].board,
+        move: positionHistory[positionHistory.length - 1].move,
+      });
+    }
+  };
+  const handleValidMove = ({
+    move,
+    sourceSquare,
+    targetSquare,
+    isPreviewing,
+    moveNum,
+  }) => {
     setLastMove((prev) => {
       prev.validMove = true;
       prev.color = move.color;
@@ -100,26 +95,111 @@ function App() {
     });
     setPosition({
       board: game.board(),
-      move: { sourceSquare: move.from, targetSquare: move.to },
+      move: { sourceSquare, targetSquare },
     });
     setMoveHistory(game.history({ verbose: true }));
+    // Makes sure preview is reset if pieceDrop is done during a preview
+    setPreview((prev) => {
+      prev.movedAfterPreview = false;
+      if (prev.isPreviewing) {
+        prev.movedAfterPreview = true;
+      }
+      prev.isPreviewing = false;
+      prev.moveNum = prev.moveNum + 1;
+
+      return {
+        ...prev,
+      };
+    });
+
+    // Erases position history after current piece drop if it is done during a preview
+    if (isPreviewing) {
+      // Remove history after current preview
+      setPositionHistory((prev) => {
+        const lastIndex = moveNum + 1;
+        return [
+          ...prev.slice(0, lastIndex),
+          {
+            board: game.board(),
+            move: { sourceSquare, targetSquare },
+            pgn: game.pgn(),
+          },
+        ];
+      });
+      return;
+    }
     setPositionHistory((prev) => {
       return [
         ...prev,
         {
           board: game.board(),
-          move: { sourceSquare: move.from, targetSquare: move.to },
+          move: { sourceSquare, targetSquare },
           pgn: game.pgn(),
         },
       ];
     });
-    setPreview((prev) => {
-      return {
-        isPreviewing: false,
-        movedAfterPreview: false,
-        moveNum: prev.moveNum + 1,
-      };
+  };
+  const gameOver = () => {
+    setGameState((prev) => {
+      prev.gameOver = true;
+      prev.canMovePieces = false;
+      // Last move game ending move was made by your team
+      if (prev.gameMode === "computer") {
+        prev.winnerTxt = "Congrats, you won!";
+      } else if (game.turn() === "b") {
+        prev.winnerTxt = "player 1 has Won!";
+      } else {
+        prev.winnerTxt = "player 2 has Won!";
+      }
+
+      if (game.isCheckmate()) {
+        prev.decisionTxt = "by checkmate";
+      } else if (game.isDraw()) {
+        prev.winnerTxt = "Draw!";
+        if (game.isStalemate()) {
+          prev.decisionTxt = "by stalemate";
+        } else if (game.isInsufficientMaterial()) {
+          prev.decisionTxt = "by insufficient material";
+        } else if (game.isThreefoldRepetition()) {
+          prev.decisionTxt = "by threefold repetition";
+        }
+      }
+      return { ...prev };
     });
+  };
+  const changePlayerTurn = () => {
+    setGameState((prev) => {
+      prev.playerTurn = prev.playerTurn === "white" ? "black" : "white";
+      return { ...prev };
+    });
+  };
+  // *********************************************************************************
+  // *********************************************************************************
+
+  const makeRandomMove = useCallback(() => {
+    const possibleMoves = game.moves();
+    // No moves possible
+    if (possibleMoves.length === 0) return;
+
+    // Make random move
+    const randomIdx = Math.floor(Math.random() * possibleMoves.length);
+    const move = game.move(possibleMoves[randomIdx]);
+
+    // Move was valid and game is not over
+    handleValidMove({
+      move,
+      sourceSquare: move.from,
+      targetSquare: move.to,
+      isPreviewing: null,
+      moveNum: null,
+    });
+    // End game
+    if (game.isGameOver()) {
+      gameOver();
+      return;
+    }
+    // Game is not over: change players
+    changePlayerTurn();
   }, []);
 
   // Runs when a piece is dropped on the board
@@ -145,127 +225,32 @@ function App() {
         });
       }
 
-      // End Game
-      if (game.isGameOver()) {
-        setGameState((prev) => {
-          prev.gameOver = true;
-          prev.canMovePieces = false;
-          // Last move game ending move was made by your team
-          if (prev.gameMode === "computer") {
-            prev.winnerTxt = "Congrats, you won!";
-          } else if (game.turn() === "b") {
-            prev.winnerTxt = "player 1 has Won!";
-          } else {
-            prev.winnerTxt = "player 2 has Won!";
-          }
-
-          if (game.isCheckmate()) {
-            prev.decisionTxt = "by checkmate";
-          } else if (game.isDraw()) {
-            prev.winnerTxt = "Draw!";
-            if (game.isStalemate()) {
-              prev.decisionTxt = "by stalemate";
-            } else if (game.isInsufficientMaterial()) {
-              prev.decisionTxt = "by insufficient material";
-            } else if (game.isThreefoldRepetition()) {
-              prev.decisionTxt = "by threefold repetition";
-            }
-          }
-          return { ...prev };
-        });
-      }
-
       // Move wasn't valid don't update board
       if (move === null) {
-        setLastMove((prev) => {
-          prev.validMove = false;
-          prev.captured = null;
-          prev.color = "";
-          return { ...prev };
+        handleInvalidMove({
+          isPreviewing: preview.isPreviewing,
+          positionHistory,
         });
-        if (preview.isPreviewing) {
-          game.loadPgn(positionHistory[positionHistory.length - 1].pgn);
-          // Makes sure preview is reset if pieceDrop is done during a preview
-          setPreview({
-            isPreviewing: false,
-            movedAfterPreview: false,
-            moveNum: positionHistory.length - 1,
-          });
-          // Moves pieces back to latest position on invalid move
-          setPosition({
-            board: positionHistory[positionHistory.length - 1].board,
-            move: positionHistory[positionHistory.length - 1].move,
-          });
-        }
         return false;
       }
 
       // Move was valid so update board
-      if (targetSquare !== sourceSquare) {
-        // Change player turn
-        if (!game.isGameOver()) {
-          setGameState((prev) => {
-            prev.playerTurn = prev.playerTurn === "white" ? "black" : "white";
-            return { ...prev };
-          });
-        }
-        setLastMove((prev) => {
-          prev.validMove = true;
-          prev.color = move.color;
-          if (move.captured) {
-            prev.captured = move.captured;
-          } else {
-            prev.captured = null;
-          }
-          return { ...prev };
-        });
-        setPosition({
-          board: game.board(),
-          move: { sourceSquare, targetSquare },
-        });
-        setMoveHistory(game.history({ verbose: true }));
-        // Makes sure preview is reset if pieceDrop is done during a preview
-        setPreview((prev) => {
-          prev.movedAfterPreview = false;
-          if (prev.isPreviewing) {
-            prev.movedAfterPreview = true;
-          }
-          prev.isPreviewing = false;
-          prev.moveNum = prev.moveNum + 1;
+      handleValidMove({
+        move,
+        sourceSquare,
+        targetSquare,
+        isPreviewing: preview.isPreviewing,
+        moveNum: preview.moveNum,
+      });
 
-          return {
-            ...prev,
-          };
-        });
-
-        // Erases position history after current piece drop if it is done during a preview
-        if (preview.isPreviewing) {
-          // Remove history after current preview
-          setPositionHistory((prev) => {
-            const lastIndex = preview.moveNum + 1;
-            return [
-              ...prev.slice(0, lastIndex),
-              {
-                board: game.board(),
-                move: { sourceSquare, targetSquare },
-                pgn: game.pgn(),
-              },
-            ];
-          });
-        } else {
-          setPositionHistory((prev) => {
-            return [
-              ...prev,
-              {
-                board: game.board(),
-                move: { sourceSquare, targetSquare },
-                pgn: game.pgn(),
-              },
-            ];
-          });
-        }
+      // End Game
+      if (game.isGameOver()) {
+        gameOver();
+        return true;
       }
 
+      // Change players and give computer control if gameMode is computer
+      changePlayerTurn();
       if (!game.isGameOver() && gameState.gameMode === "computer") {
         window.setTimeout(makeRandomMove, 1000);
       }
@@ -295,7 +280,6 @@ function App() {
     [gameState.gameMode, gameState.team]
   );
 
-  // Change board orientation to chosen value
   const changeBoardOrientation = (boardOrientation) => {
     if (boardOrientation === "random") {
       boardOrientation =
@@ -311,20 +295,12 @@ function App() {
     }
   };
 
-  //  Flip board
   const flipBoardOrientation = () => {
     if (boardOrientation === "white") {
       setBoardOrientation("black");
     } else {
       setBoardOrientation("white");
     }
-  };
-
-  const deactivatePieces = () => {
-    setGameState((prev) => {
-      prev.canMovePieces = false;
-      return { ...prev };
-    });
   };
 
   const chooseGameMode = (gameMode) => {
