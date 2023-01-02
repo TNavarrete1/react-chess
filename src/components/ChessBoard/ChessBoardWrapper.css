@@ -114,9 +114,25 @@
   width: 100px;
   font-size: 20px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
-  background: rgba(0, 0, 0, 0.3);
   border-radius: 5px;
+  opacity: 0.5;
+}
+.time .time-txt {
+    opacity: 0.8;
+}
+.time-black {
+    background: #111;
+    color: #eee;
+}
+.time-white {
+    background: #eee;
+    color: #111;
+}
+.active-time {
+    opacity: 1;
+}
+.active-time .time-txt {
+    opacity: 1;
 }
 
 @media screen and ((max-width: 375px) or (max-height: 375px)) {
